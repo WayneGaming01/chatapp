@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/library/css/main.css" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/library/css/custom.css" />
+    <script src="https://kit.fontawesome.com/73d4b4352e.js" crossorigin="anonymous"></script>
+  </head>
+  <style>
+    * {
+      font-family: "Raleway", sans-serif;
+    }
+  </style>
+  <body class="bg-main">
+    <section>
+      <main class="flex justify-center items-center h-screen">
+        <section class="p-9 w-full bg-dark-background text-white">
+          <form action="" method="POST" id="loginform">
+            <div class="form-control">
+              <input class="transition ease-in outline-none text-slate-900" type="text" name="email" id="email">
+            </div>
+            <div class="form-control">
+              <input class="transition ease-in outline-none text-slate-900" type="password" name="password" id="password">
+            </div>
+            <div class="form-control">
+              <input class="" type="submit" name="login" id="login" value="Login">
+            </div>
+          </form>
+        </section>
+      </main>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#loginform").submit(async function (e) {
+          e.preventDefault();
+
+          const notyf = new Notyf({
+            position: {
+              x: "right",
+              y: "bottom",
+            },
+            types: [
+              {
+                type: "warning",
+                background: "orange",
+                icon: {
+                  className: "material-icons",
+                  tagName: "i",
+                  text: "warning",
+                },
+              },
+              {
+                type: "error",
+                background: "indianred",
+                dismissible: true,
+              },
+              {
+                type: "success",
+                dismissible: true,
+              },
+            ],
+          });
+
+          const email = $("#email").val();
+          const password = $("#password").val();
+
+          try {
+            const res = await fetch("/api/auth/login", {
+              method: "POST",
+              body: JSON.stringify({
+                email: email,
+                password: password,
+              }),
+              headers: { "Content-Type": "application/json" },
+            });
+            const data = await res.json();
+            if (data.errors) {
+              notyf.error(data.errors.username);
+            }
+            if (data.user) {
+              notyf.success("Logging in...");
+              setTimeout(() => {
+                location.assign("/1");
+              }, 2000);
+            }
+          } catch {
+            console.log(err);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

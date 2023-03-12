@@ -1,0 +1,10 @@
+{
+  "PORT": 3000,
+  "MONGO_CLUSTER": "mongodb+srv://admin:tPcknggYPAWS1DLA@cluster0.du5g8rv.mongodb.net/chatapp",
+  "CLIENT_URL": "http://localhost:3000",
+  "CLIENT_NAME": "CoreFire",
+  "JWT": {
+    "JWT_AUTH": "SADAJdsjDSAjsadjASDJksja",
+    "JWT_VERIFYTOKEN": "DSAJnjdsjDSAJdsjadjsjADJAJ"
+  }
+}

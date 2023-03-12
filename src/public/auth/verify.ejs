@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/library/css/main.css" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    * {
+      font-family: "Raleway", sans-serif;
+    }
+  </style>
+  <body>
+    <main
+      class="h-screen flex flex-col justify-center items-center text-centr+er"
+    >
+      <section class="w-full max-w-xs md:max-w-lg">
+        <div class="text-xl font-medium text-white text-center mb-3">
+          <% if(!error) { %> Your account has been verified! <% } else { %> <%=
+          error %> <% } %><br />
+          <span class="text-sm text-zinc-400"
+            >Go back <a href="/" class="underline">here</a></span
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
