@@ -1,8 +1,10 @@
+/* Toast */
+
 .toast {
   box-sizing: border-box;
   padding: 0.75rem;
-  background-color: #262626;
-  border: 1px solid #333;
+  background-color: #404040;
+  border: 2px solid #363636;
   border-radius: 0.25em;
   position: relative;
   color: #fff;
@@ -77,4 +79,10 @@
 .toast-container[data-position$="-center"] {
   left: 50%;
   transform: translateX(-50%);
+}
+
+@media screen and (max-width: 612px) {
+    .max-w-xs-custom{
+        max-width: 20rem;
+    }
 }

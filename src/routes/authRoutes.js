@@ -173,25 +173,25 @@ router.post("/api/auth/signup", async (req, res, next) => {
   const { username, email, password, cpassword } = req.body;
 
   if (!username) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors({ message: "Mind putting an username? uh.." }),
     });
   } else if (!email) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors({ message: "Mind putting an email? bruh." }),
     });
   } else if (!validator.validate(email)) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors({
         message: `Please enter a valid email! We don't accept invalid email or no access to ${config.CLIENT_NAME}`,
       }),
     });
   } else if (!password) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors({ message: "Mind putting an password? zzz.." }),
     });
   } else if (password != cpassword) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors({
         message:
           "Oops. Password did not match. You should try checking your spelling.",
@@ -202,7 +202,7 @@ router.post("/api/auth/signup", async (req, res, next) => {
   try {
     const userExists = await User.checkUser(username);
     if (!userExists)
-      return res.status(400).json({
+      return res.json({
         errors: handleErrors({
           message:
             "Someone else appears to have obtained the username before you.",
@@ -239,7 +239,7 @@ router.post("/api/auth/signup", async (req, res, next) => {
 
     Ecredentials.sendMail(mailOptions, function (error, info) {
       if (error) {
-        res.status(400).json({ errors: handleErrors(error) });
+        res.json({ errors: handleErrors(error) });
       } else {
         console.log("Info sent: " + info.response);
         res.status(200).json({ message: "Info sent successfully" });
@@ -248,7 +248,7 @@ router.post("/api/auth/signup", async (req, res, next) => {
 
     next();
   } catch (err) {
-    res.status(400).json({ errors: handleErrors(err) });
+    res.json({ errors: handleErrors(err) });
     next();
   }
 });
@@ -257,25 +257,25 @@ router.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors_({
         message: "How can you login if you don't have your email...",
       }),
     });
   } else if (!validator.validate(email)) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors({
         message: `Please enter a valid email! We don't accept invalid email or no access to ${config.CLIENT_NAME}`,
       }),
     });
   } else if (!User.findOne({ email: email })) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors_({
         message: "I guess you haven't signed up yet..",
       }),
     });
   } else if (!password) {
-    return res.status(400).json({
+    return res.json({
       errors: handleErrors_({ message: "Mind putting your password?" }),
     });
   }
@@ -306,7 +306,7 @@ router.post("/api/auth/login", async (req, res) => {
 
       Ecredentials.sendMail(mailOptions, function (error, info) {
         if (error) {
-          res.status(400).json({ errors: handleErrors(error) });
+          res.json({ errors: handleErrors(error) });
         } else {
           console.log("Info sent: " + info.response);
           res.status(200).json({ message: "Info sent successfully" });
@@ -314,7 +314,7 @@ router.post("/api/auth/login", async (req, res) => {
       });
     }
   } catch (err) {
-    res.status(400).json({ errors: handleErrors(err) });
+    res.json({ errors: handleErrors(err) });
   }
 });
 

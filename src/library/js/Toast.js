@@ -4,6 +4,7 @@ const DEFAULT_OPTIONS = {
   onClose: () => {},
   canClose: true,
   showProgress: true,
+  backgroundColor: "default"
 };
 
 export default class Toast {
@@ -104,6 +105,36 @@ export default class Toast {
       };
 
       this.#progressInterval = requestAnimationFrame(func);
+    }
+  }
+
+  set backgroundColor(value) {
+    if (value === "default") {
+      this.#toastElem.style.backgroundColor = "#404040";
+      this.#toastElem.style.borderColor = "#363636";
+    }
+    if (value === "white") {
+      this.#toastElem.style.backgroundColor = "#fff";
+      this.#toastElem.style.borderColor = "#a3a3a3";
+      this.#toastElem.style.color = "#171717";
+    } else if (value === "black") {
+      this.#toastElem.style.backgroundColor = "#171717";
+      this.#toastElem.style.borderColor = "#262626";
+    } else if (value === "blue") {
+      this.#toastElem.style.backgroundColor = "#3b82f6";
+      this.#toastElem.style.borderColor = "#93c5fd";
+    } else if (value === "red") {
+      this.#toastElem.style.backgroundColor = "#ef4444";
+      this.#toastElem.style.borderColor = "#fca5a5";
+    } else if (value === "green") {
+      this.#toastElem.style.backgroundColor = "#22c55e";
+      this.#toastElem.style.borderColor = "#86efac";
+    } else if (value === "orange") {
+      this.#toastElem.style.backgroundColor = "#f97316";
+      this.#toastElem.style.borderColor = "#fdba74";
+    } else if (value === "purple") {
+      this.#toastElem.style.backgroundColor = "#a855f7";
+      this.#toastElem.style.borderColor = "#d8b4fe";
     }
   }
 
