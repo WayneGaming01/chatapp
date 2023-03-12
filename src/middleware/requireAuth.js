@@ -1,13 +1,12 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const config = require("../config/config.json");
-const store = require("store2");
 
 const requireAuth = (req, res, next) => {
-  const token = store.get("_DO_NOT_SHARE_TOKEN");
+  const _DO_NOT_SHARE_TOKEN = req.cookies._DO_NOT_SHARE_TOKEN;
 
-  if (token) {
-    jwt.verify(token, config.JWT.JWT_AUTH, (err, decodedToken) => {
+  if (_DO_NOT_SHARE_TOKEN) {
+    jwt.verify(_DO_NOT_SHARE_TOKEN, config.JWT.JWT_AUTH, (err, decodedToken) => {
       if (err) {
         console.log(err.message);
         res.redirect("/login");
@@ -22,10 +21,10 @@ const requireAuth = (req, res, next) => {
 };
 
 const checkUser = (req, res, next) => {
-  const token = store.get("_DO_NOT_SHARE_TOKEN");
+  const _DO_NOT_SHARE_TOKEN = req.cookies._DO_NOT_SHARE_TOKEN;
 
-  if (token) {
-    jwt.verify(token, config.JWT.JWT_AUTH, async (err, decodedToken) => {
+  if (_DO_NOT_SHARE_TOKEN) {
+    jwt.verify(_DO_NOT_SHARE_TOKEN, config.JWT.JWT_AUTH, async (err, decodedToken) => {
       if (err) {
         console.log(err.message);
         res.locals.user = null;

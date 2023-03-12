@@ -1,76 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/library/css/main.css" />
-    <title>Document</title>
+    <title>Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/library/css/custom.css" />
-    <script src="https://kit.fontawesome.com/73d4b4352e.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/73d4b4352e.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <style>
     * {
-      font-family: "Raleway", sans-serif;
+      font-family: "Poppins", sans-serif;
     }
   </style>
-  <body class="bg-main">
+  <body class="dark:bg-main">
     <section>
       <main class="flex justify-center items-center h-screen">
-        <section class="p-9 w-full bg-dark-background text-white">
-          <form action="" method="POST" id="loginform">
-            <div class="form-control">
-              <input class="transition ease-in outline-none text-slate-900" type="text" name="email" id="email">
+        <section>
+          <div class="container mx-auto">
+            <div
+              class="flex flex-col w-full bg-white rounded mx-auto shadow-lg overflow-hidden dark:bg-neutral-700"
+            >
+              <div class="w-full py-16 px-12">
+                <form action="" id="loginform">
+                  <div class="mb-7">
+                    <h1 class="text-center text-white text-2xl">Login</h1>
+                  </div>
+                  <div class="mb-5">
+                    <label for="" class="text-sm uppercase text-neutral-300 mb-2"
+                      >Email</label
+                    >
+                    <input
+                      type="text"
+                      class="disabled:bg-neutral-900 disabled:cursor-default w-full px-3 p-3 outline-none border-none rounded bg-neutral-800 text-neutral-300"
+                      name="email"
+                      id="email"
+                    />
+                  </div>
+                  <div class="mb-5">
+                    <label for="" class="text-sm uppercase text-neutral-300 mb-2"
+                      >Password</label
+                    >
+                    <input
+                      type="password"
+                      class="disabled:bg-neutral-900 disabled:cursor-default w-full px-3 p-3 outline-none border-none rounded bg-neutral-800 text-neutral-300"
+                      name="password"
+                      id="password"
+                    />
+                  </div>
+                  <div class="mt-5">
+                    <input
+                      type="submit"
+                      class="disabled:bg-neutral-900 disabled:cursor-default transition ease-in w-full px-3 p-3 rounded-sm bg-neutral-800 text-neutral-300 cursor-pointer hover:bg-neutral-900"
+                      name="login"
+                      id="login"
+                      value="Login"
+                    />
+                  </div>
+                  <span class="text-neutral-300 text-sm"
+                    >Need an account?
+                    <a href="/signup" class="hover:underline text-blue-600"
+                      >Signup</a
+                    ></span
+                  >
+                </form>
+              </div>
             </div>
-            <div class="form-control">
-              <input class="transition ease-in outline-none text-slate-900" type="password" name="password" id="password">
-            </div>
-            <div class="form-control">
-              <input class="" type="submit" name="login" id="login" value="Login">
-            </div>
-          </form>
+          </div>
         </section>
       </main>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
-    <script>
+    <script type="module">
+      import Toast from "/library/js/Toast.js";
+
       $(document).ready(function () {
         $("#loginform").submit(async function (e) {
           e.preventDefault();
-
-          const notyf = new Notyf({
-            position: {
-              x: "right",
-              y: "bottom",
-            },
-            types: [
-              {
-                type: "warning",
-                background: "orange",
-                icon: {
-                  className: "material-icons",
-                  tagName: "i",
-                  text: "warning",
-                },
-              },
-              {
-                type: "error",
-                background: "indianred",
-                dismissible: true,
-              },
-              {
-                type: "success",
-                dismissible: true,
-              },
-            ],
-          });
 
           const email = $("#email").val();
           const password = $("#password").val();
@@ -85,16 +101,44 @@
               headers: { "Content-Type": "application/json" },
             });
             const data = await res.json();
+
+            console.log(data);
             if (data.errors) {
-              notyf.error(data.errors.username);
+              if (data.errors.email) {
+                const toast = new Toast({
+                  text: data.errors.email,
+                  position: "bottom-right",
+                  canClose: false,
+                  showProgress: false,
+                });
+              }
+
+              if (data.errors.password) {
+                const toast = new Toast({
+                  text: data.errors.password,
+                  position: "bottom-right",
+                  canClose: false,
+                  showProgress: false,
+                });
+              }
             }
             if (data.user) {
-              notyf.success("Logging in...");
+              const toast = new Toast({
+                text: "Logging in...",
+                position: "bottom-right",
+                canClose: false,
+                showProgress: false,
+              });
+              $("#email").val("");
+              $("#password").val("");
+              $("#email").prop("disabled", true);
+              $("#password").prop("disabled", true);
+              $("#login").prop("disabled", true);
               setTimeout(() => {
-                location.assign("/1");
-              }, 2000);
+                location.assign("");
+              }, 5000);
             }
-          } catch {
+          } catch (err) {
             console.log(err);
           }
         });

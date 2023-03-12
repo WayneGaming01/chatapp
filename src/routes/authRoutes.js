@@ -3,7 +3,6 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { Ecredentials, emailinfo } = require("../service/send-email");
 const config = require("../config/config.json");
-const store = require("store2");
 const getAge = require("findage");
 const validator = require("email-validator");
 const browser = require("browser-detect");
@@ -11,13 +10,13 @@ const browser = require("browser-detect");
 const router = Router();
 
 //createToken
-const createToken = (id) => {
+const create_DO_NOT_SHARE_TOKEN = (id) => {
   return jwt.sign({ id }, config.JWT.JWT_AUTH, {
     expiresIn: "365d",
   });
 };
 
-const createToken_ = (id) => {
+const create_VERIFICATION_TOKEN = (id) => {
   return jwt.sign({ id }, config.JWT.JWT_VERIFYTOKEN, {
     expiresIn: "20m",
   });
@@ -58,7 +57,6 @@ const handleErrors = (err) => {
     username: "",
     email: "",
     password: "",
-    birthDate: "",
   };
 
   if (err.message === "Mind putting an username? uh..") {
@@ -73,20 +71,12 @@ const handleErrors = (err) => {
     errors.password = "Mind putting an password? zzz..";
   }
 
-  if (err.message === "Mind selecting your birth date?") {
-    errors.birthDate = "Mind selecting your birth date?";
-  }
-
   if (
     err.message ===
     "Oops. Password did not match. You should try checking your spelling."
   ) {
     errors.password =
       "Oops. Passwords did not match. You should try checking your spelling.";
-  }
-
-  if (err.message === "You're too young to use " + config.CLIENT_NAME + "!") {
-    errors.birthDate = "You're too young to use " + config.CLIENT_NAME + "!";
   }
 
   if (
@@ -132,11 +122,11 @@ router.get("/verify", (req, res) => {
 });
 
 router.get("/verify/:id", (req, res, next) => {
-  const vToken = req.params.id;
+  const _VERIFICATION_TOKEN = req.params.id;
 
-  if (store.get("_VERIFICATION_TOKEN")) {
+  if (req.cookies._VERIFICATION_TOKEN) {
     jwt.verify(
-      vToken,
+      _VERIFICATION_TOKEN,
       config.JWT.JWT_VERIFYTOKEN,
       async (err, decodedToken) => {
         if (err) {
@@ -173,58 +163,38 @@ router.get("/verify/:id", (req, res, next) => {
     );
   }
 
-  if (!vToken) {
+  if (!_VERIFICATION_TOKEN) {
     res.redirect("/");
   }
 });
 
 //post
 router.post("/api/auth/signup", async (req, res, next) => {
-  const { username, email, password, cpassword, birthDate } = req.body;
-
-  var MyDate = new Date();
-  var currentAge;
-
-  currentAge =
-    ("0" + (MyDate.getMonth() + 1)).slice(-2) +
-    "/" +
-    ("0" + MyDate.getDate()).slice(-2) +
-    "/" +
-    MyDate.getFullYear();
+  const { username, email, password, cpassword } = req.body;
 
   if (!username) {
-    return res.json({
+    return res.status(400).json({
       errors: handleErrors({ message: "Mind putting an username? uh.." }),
     });
   } else if (!email) {
-    return res.json({
+    return res.status(400).json({
       errors: handleErrors({ message: "Mind putting an email? bruh." }),
     });
   } else if (!validator.validate(email)) {
-    return res.json({
+    return res.status(400).json({
       errors: handleErrors({
         message: `Please enter a valid email! We don't accept invalid email or no access to ${config.CLIENT_NAME}`,
       }),
     });
   } else if (!password) {
-    return res.json({
+    return res.status(400).json({
       errors: handleErrors({ message: "Mind putting an password? zzz.." }),
     });
   } else if (password != cpassword) {
-    return res.json({
+    return res.status(400).json({
       errors: handleErrors({
         message:
           "Oops. Password did not match. You should try checking your spelling.",
-      }),
-    });
-  } else if (!birthDate) {
-    return res.json({
-      errors: handleErrors({ message: "Mind selecting your birth date?" }),
-    });
-  } else if (getAge.fullAge(birthDate) < "13 years 0 month 0 day") {
-    return res.json({
-      errors: handleErrors({
-        message: "You're too young to use " + config.CLIENT_NAME + "!",
       }),
     });
   }
@@ -244,27 +214,32 @@ router.post("/api/auth/signup", async (req, res, next) => {
       username,
       email,
       password,
-      birthDate,
       vStatus,
       lastIPLogin,
     });
-    const token = createToken(user._id);
-    const token_ = createToken_(user._id);
+    const _DO_NOT_SHARE_TOKEN = create_DO_NOT_SHARE_TOKEN(user._id);
+    const _VERIFICATION_TOKEN = create_VERIFICATION_TOKEN(user._id);
 
-    store.set("_DO_NOT_SHARE_TOKEN", token, { httpOnly: true });
-    store.set("_VERIFICATION_TOKEN", token_, { httpOnly: true });
+    res.cookie("_DO_NOT_SHARE_TOKEN", _DO_NOT_SHARE_TOKEN, {
+      maxAge: 365 * 12 * 60 * 60,
+      httpOnly: true,
+    });
+    res.cookie("_VERIFICATION_TOKEN", _VERIFICATION_TOKEN, {
+      expires: "20m",
+      httpOnly: true,
+    });
     res.status(201).json({ user: user._id });
 
     const mailOptions = {
       from: emailinfo.MAIL_USER,
       to: email,
       subject: `Verification Status`,
-      html: ``,
+      html: `Hey! Verify your account here: ${config.CLIENT_URL}/verify/${_VERIFICATION_TOKEN}`,
     };
 
     Ecredentials.sendMail(mailOptions, function (error, info) {
       if (error) {
-        res.json({ errors: handleErrors(error) });
+        res.status(400).json({ errors: handleErrors(error) });
       } else {
         console.log("Info sent: " + info.response);
         res.status(200).json({ message: "Info sent successfully" });
@@ -281,34 +256,45 @@ router.post("/api/auth/signup", async (req, res, next) => {
 router.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
-  if (!User.findOne({ email: email }))
-    return res.json({
-      errors: handleErrors_({
-        message: "I guess you haven't signed up yet..",
-      }),
-    });
-
-  if (!email)
-    return res.json({
+  if (!email) {
+    return res.status(400).json({
       errors: handleErrors_({
         message: "How can you login if you don't have your email...",
       }),
     });
-
-  if (!password)
-    return res.json({
+  } else if (!validator.validate(email)) {
+    return res.status(400).json({
+      errors: handleErrors({
+        message: `Please enter a valid email! We don't accept invalid email or no access to ${config.CLIENT_NAME}`,
+      }),
+    });
+  } else if (!User.findOne({ email: email })) {
+    return res.status(400).json({
+      errors: handleErrors_({
+        message: "I guess you haven't signed up yet..",
+      }),
+    });
+  } else if (!password) {
+    return res.status(400).json({
       errors: handleErrors_({ message: "Mind putting your password?" }),
     });
+  }
 
   try {
     const user = await User.login(email, password);
+    const _DO_NOT_SHARE_TOKEN = create_DO_NOT_SHARE_TOKEN(user._id);
+
     if (User.findOne({ lastIPLogin: req.socket.remoteAddress })) {
-      const token = createToken(user._id);
-      store.set("_DO_NOT_SHARE_TOKEN", token, { httpOnly: true });
+      res.cookie("_DO_NOT_SHARE_TOKEN", _DO_NOT_SHARE_TOKEN, {
+        maxAge: 365 * 12 * 60 * 60,
+        httpOnly: true,
+      });
       res.status(200).json({ user: user._id });
     } else {
-      const token = createToken(user._id);
-      store.set("_DO_NOT_SHARE_TOKEN", token, { httpOnly: true });
+      res.cookie("_DO_NOT_SHARE_TOKEN", _DO_NOT_SHARE_TOKEN, {
+        maxAge: 365 * 12 * 60 * 60,
+        httpOnly: true,
+      });
       const mailOptions = {
         from: emailinfo.MAIL_USER,
         to: email,
@@ -320,7 +306,7 @@ router.post("/api/auth/login", async (req, res) => {
 
       Ecredentials.sendMail(mailOptions, function (error, info) {
         if (error) {
-          res.json({ errors: handleErrors(error) });
+          res.status(400).json({ errors: handleErrors(error) });
         } else {
           console.log("Info sent: " + info.response);
           res.status(200).json({ message: "Info sent successfully" });
@@ -328,7 +314,7 @@ router.post("/api/auth/login", async (req, res) => {
       });
     }
   } catch (err) {
-    res.json({ errors: handleErrors(err) });
+    res.status(400).json({ errors: handleErrors(err) });
   }
 });
 

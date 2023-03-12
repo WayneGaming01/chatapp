@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const { checkUser, requireAuth } = require("../middleware/requireAuth");
 const router = Router();
-const store = require("store2");
 
 router.get("/", (req, res) => {
   res.render("index");

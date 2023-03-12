@@ -23,9 +23,6 @@ const userSchema = mongoose.Schema({
       "Minimun password requirement is 6 characters! How can you protect your account like that:/",
     ],
   },
-  birthDate: {
-    type: String,
-  },
   vStatus: {
     type: String,
   },
