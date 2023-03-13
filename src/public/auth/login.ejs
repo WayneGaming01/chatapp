@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/library/css/main.css" />
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/library/css/custom.css" />
+    <script
+      src="https://kit.fontawesome.com/73d4b4352e.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <style>
+    * {
+      font-family: "Poppins", sans-serif;
+    }
+  </style>
+  <body class="dark:bg-main">
+    <section class="h-screen">
+      <span
+        class="absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4"
+        ><a href="/"
+          ><i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Back to home</a
+        ></span
+      >
+      <span
+        id="dark-mode"
+        class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
+      >
+        <i class="fa-solid fa-sun"></i>
+      </span>
+      <main class="flex justify-center items-center h-screen">
+        <section>
+          <div class="container mx-auto max-w-xs-custom">
+            <div
+              class="pb-5 flex flex-col w-full bg-white rounded mx-auto shadow-lg overflow-hidden bg-neutral-100 dark:bg-neutral-700"
+            >
+              <div class="w-full py-7 px-12">
+                <form action="" id="loginform">
+                  <div class="mb-7">
+                    <h1
+                      class="text-center text-neutral-500 dark:text-white text-2xl"
+                    >
+                      Login
+                    </h1>
+                  </div>
+                  <div class="mb-5">
+                    <label
+                      for=""
+                      class="text-sm uppercase text-neutral-700 dark:text-neutral-300 mb-2"
+                      >Email</label
+                    >
+                    <input
+                      type="text"
+                      class="dark:disabled:bg-neutral-900 disabled:bg-neutral-600 disabled:cursor-default w-full px-3 p-3 outline-none border-none rounded text-neutral-400 bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300"
+                      name="email"
+                      id="email"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for=""
+                      class="text-sm uppercase text-neutral-700 dark:text-neutral-300 mb-2"
+                      >Password</label
+                    >
+                    <input
+                      type="password"
+                      class="dark:disabled:bg-neutral-900 disabled:bg-neutral-600 disabled:cursor-default w-full px-3 p-3 outline-none border-none rounded text-neutral-400 bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300"
+                      name="password"
+                      id="password"
+                    />
+                  </div>
+                  <span class="text-neutral-500">
+                    <a
+                      href="/forgot-password"
+                      class="hover:underline text-blue-400 text-sm"
+                      >Forgot password</a
+                    ></span
+                  >
+                  <div class="mt-5">
+                    <input
+                      type="submit"
+                      class="dark:disabled:bg-neutral-900 disabled:bg-neutral-600 disabled:cursor-default transition ease-in w-full px-3 p-3 rounded-sm text-neutral-300 bg-neutral-400 hover:bg-neutral-500 hover:text-neutral-400 dark:bg-neutral-800 dark:text-neutral-300 cursor-pointer dark:hover:bg-neutral-900"
+                      name="login"
+                      id="login"
+                      value="Login"
+                    />
+                  </div>
+                  <span class="text-neutral-500 dark:text-neutral-300 text-sm"
+                    >Need an account?
+                    <a href="/signup" class="hover:underline text-blue-400"
+                      >Signup</a
+                    ></span
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+    <script type="module" src="/library/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <script type="module">
+      import Toast from "/library/js/Toast.js";
+
+      $(document).ready(function () {
+        $("#loginform").submit(async function (e) {
+          e.preventDefault();
+
+          const email = $("#email").val();
+          const password = $("#password").val();
+
+          try {
+            const res = await fetch("/api/auth/login", {
+              method: "POST",
+              body: JSON.stringify({
+                email: email,
+                password: password,
+              }),
+              headers: { "Content-Type": "application/json" },
+            });
+            const data = await res.json();
+
+            console.log(data);
+            if (data.errors) {
+              if (data.errors.email) {
+                const toast = new Toast({
+                  text: data.errors.email,
+                  position: "bottom-right",
+                  canClose: false,
+                  showProgress: false,
+                });
+              }
+
+              if (data.errors.password) {
+                const toast = new Toast({
+                  text: data.errors.password,
+                  position: "bottom-right",
+                  canClose: false,
+                  showProgress: false,
+                });
+              }
+            }
+            if (data.user) {
+              const toast = new Toast({
+                text: "Logging in...",
+                position: "bottom-right",
+                canClose: false,
+                showProgress: false,
+              });
+              $("#email").val("");
+              $("#password").val("");
+              $("#email").prop("disabled", true);
+              $("#password").prop("disabled", true);
+              $("#login").prop("disabled", true);
+              setTimeout(() => {
+                location.assign("/app");
+              }, 5000);
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

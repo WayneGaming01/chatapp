@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/library/css/main.css" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    * {
+      font-family: "Poppins", sans-serif;
+    }
+  </style>
+  <body>
+    <% if(user) { %>
+    <span>Welcome, <%= user.email %></span>
+    <span><a href="/logout">Logout</a></span>
+    <% } %>
+    <script type="module" src="/library/js/script.js"></script>
+  </body>
+</html>

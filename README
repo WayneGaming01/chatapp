@@ -1,0 +1,17 @@
+# Install all dependencies: "npm run build"
+
+# Cannot see config.json in ./src/config/: "Run "npm run dev" or "npm run start"
+# It will automatically create one for you."
+
+# Edit config.json in: ./src/config/config.json
+# Edit tailwind.config.js in: ./tailwind.config.js
+
+# Dont use config.example.json as your config file!
+
+# Push to Github Repository
+# git remote add origin <your github repository url> -- Use this if you still don't have used this command
+# git add .
+# git commit -m "initial commit"
+# git push -u origin main
+
+#corefire

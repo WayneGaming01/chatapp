@@ -1,0 +1,10 @@
+{
+  "PORT": 3000,
+  "CLUSTER": "",
+  "CLIENT_URL": "http://localhost:3000",
+  "CLIENT_NAME": "",
+  "JWT": {
+    "JWT_AUTH": "",
+    "JWT_VERIFYTOKEN": ""
+  }
+}
