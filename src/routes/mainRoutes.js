@@ -10,12 +10,12 @@ router.get("/", (req, res) => {
   }
 });
 
-router.get("/1", requireAuth, checkUser, (req, res) => {
-  res.render("index1");
+router.get("/app", requireAuth, checkUser, (req, res) => {
+  res.render("./app/app.ejs");
 });
 
 router.get("/logout", (req, res) => {
-  store.remove("_DO_NOT_SHARE_TOKEN");
+  res.clearCookie("_DO_NOT_SHARE_TOKEN", "");
   res.redirect("/");
 });
 

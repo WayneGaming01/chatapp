@@ -19,20 +19,10 @@
     }
   </style>
   <body>
-    <main
-      class="h-screen flex flex-col justify-center items-center text-centr+er"
-    >
-      <section class="w-full max-w-xs md:max-w-lg">
-        <div class="text-xl font-medium text-white text-center mb-3">
-          <% if(!error) { %> Your account has been verified! <% } else { %> <%=
-          error %> <% } %><br />
-          <span class="text-sm text-zinc-400"
-            >Go back <a href="/" class="underline">here</a></span
-          >
-        </div>
-      </section>
-    </main>
-    <script type="module
- src="/library/js/script.js"></script>
+    <% if(user) { %>
+    <span>Welcome, <%= user.email %></span>
+    <span><a href="/logout">Logout</a></span>
+    <% } %>
+    <script type="module" src="/library/js/script.js"></script>
   </body>
 </html>

@@ -3,7 +3,6 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { Ecredentials, emailinfo } = require("../service/send-email");
 const config = require("../config/config.json");
-const getAge = require("findage");
 const validator = require("email-validator");
 const browser = require("browser-detect");
 
@@ -190,7 +189,7 @@ router.post("/api/auth/signup", async (req, res, next) => {
     return res.json({
       errors: handleErrors({ message: "Mind putting an password? zzz.." }),
     });
-  } else if (password != cpassword) {
+  } else if (password !== cpassword) {
     return res.json({
       errors: handleErrors({
         message:
@@ -233,7 +232,7 @@ router.post("/api/auth/signup", async (req, res, next) => {
     const mailOptions = {
       from: emailinfo.MAIL_USER,
       to: email,
-      subject: `Verification Status`,
+      subject: `Verify your account`,
       html: `Hey! Verify your account here: ${config.CLIENT_URL}/verify/${_VERIFICATION_TOKEN}`,
     };
 
@@ -314,7 +313,7 @@ router.post("/api/auth/login", async (req, res) => {
       });
     }
   } catch (err) {
-    res.json({ errors: handleErrors(err) });
+    res.json({ errors: handleErrors_(err) });
   }
 });
 

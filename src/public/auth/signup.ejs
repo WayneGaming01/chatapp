@@ -25,14 +25,25 @@
   </style>
   <body class="dark:bg-main">
     <section>
-      <span class="absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4"><a href="/"><i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Back to home</a></span>
+      <span
+        class="absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4"
+        ><a href="/"
+          ><i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Back to home</a
+        ></span
+      >
+      <span
+        id="dark-mode"
+        class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
+      >
+      <i class="fa-solid fa-sun"></i>
+      </span>
       <main class="flex justify-center items-center h-screen">
         <section>
           <div class="container mx-auto max-w-xs-custom">
             <div
-              class="flex flex-col w-full bg-white rounded mx-auto shadow-lg overflow-hidden bg-neutral-100 dark:bg-neutral-700"
+              class="pb-5 flex flex-col w-full bg-white rounded mx-auto shadow-lg overflow-hidden bg-neutral-100 dark:bg-neutral-700"
             >
-              <div class="w-full py-16 px-12">
+              <div class="w-full py-7 px-12">
                 <form action="" id="signupform">
                   <div class="mb-7">
                     <h1
@@ -125,6 +136,7 @@
         </section>
       </main>
     </section>
+    <script type="module" src="/library/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
     <script type="module">
       import Toast from "/library/js/Toast.js";
@@ -159,7 +171,7 @@
                   position: "bottom-right",
                   canClose: false,
                   showProgress: false,
-                  backgroundColor: "default"
+                  backgroundColor: "default",
                 });
               }
 

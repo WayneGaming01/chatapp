@@ -81,6 +81,10 @@
   transform: translateX(-50%);
 }
 
+.dark{
+  transition: property duration transition-timing-function delay;
+}
+
 @media screen and (max-width: 612px) {
     .max-w-xs-custom{
         max-width: 20rem;

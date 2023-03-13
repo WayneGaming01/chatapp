@@ -25,17 +25,32 @@
   </style>
   <body class="dark:bg-main">
     <section class="h-screen">
-      <span class="absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4"><a href="/"><i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Back to home</a></span>
+      <span
+        class="absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4"
+        ><a href="/"
+          ><i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Back to home</a
+        ></span
+      >
+      <span
+        id="dark-mode"
+        class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
+      >
+        <i class="fa-solid fa-sun"></i>
+      </span>
       <main class="flex justify-center items-center h-screen">
         <section>
           <div class="container mx-auto max-w-xs-custom">
             <div
-              class="flex flex-col w-full bg-white rounded mx-auto shadow-lg overflow-hidden bg-neutral-100 dark:bg-neutral-700"
+              class="pb-5 flex flex-col w-full bg-white rounded mx-auto shadow-lg overflow-hidden bg-neutral-100 dark:bg-neutral-700"
             >
               <div class="w-full py-7 px-12">
                 <form action="" id="loginform">
                   <div class="mb-7">
-                    <h1 class="text-center text-neutral-500 dark:text-white text-2xl">Login</h1>
+                    <h1
+                      class="text-center text-neutral-500 dark:text-white text-2xl"
+                    >
+                      Login
+                    </h1>
                   </div>
                   <div class="mb-5">
                     <label
@@ -63,7 +78,7 @@
                       id="password"
                     />
                   </div>
-                  <span class="text-neutral-500"></span>
+                  <span class="text-neutral-500">
                     <a
                       href="/forgot-password"
                       class="hover:underline text-blue-400 text-sm"
@@ -92,6 +107,7 @@
         </section>
       </main>
     </section>
+    <script type="module" src="/library/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
     <script type="module">
       import Toast from "/library/js/Toast.js";
@@ -147,7 +163,7 @@
               $("#password").prop("disabled", true);
               $("#login").prop("disabled", true);
               setTimeout(() => {
-                location.assign("");
+                location.assign("/app");
               }, 5000);
             }
           } catch (err) {
