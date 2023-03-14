@@ -3,15 +3,11 @@ const { checkUser, requireAuth } = require("../middleware/requireAuth");
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.render("index");
-
-  if(typeof window !== "undefined") {
-    localStorage.setItem("abc", "abc");
-  }
+  res.render("./index");
 });
 
 router.get("/app", requireAuth, checkUser, (req, res) => {
-  res.render("./app/app.ejs");
+  res.render("./app/app");
 });
 
 router.get("/logout", (req, res) => {
