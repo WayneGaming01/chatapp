@@ -331,7 +331,6 @@ router.post("/api/auth/login", async (req, res) => {
         } else {
           console.log("Info sent: " + info.response);
           res.status(200).json({ user: user._id });
-          res.redirect("/app");
         }
       });
     }
