@@ -109,10 +109,14 @@ const handleErrors = (err) => {
 
 //get
 router.get("/signup", (req, res) => {
+  if(req.cookies._DO_NOT_SHARE_TOKEN) return res.redirect("/app");
+
   res.render("./auth/signup");
 });
 
 router.get("/login", (req, res) => {
+  if(req.cookies._DO_NOT_SHARE_TOKEN) return res.redirect("/app");
+  
   res.render("./auth/login");
 });
 
