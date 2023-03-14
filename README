@@ -15,3 +15,5 @@
 # git push -u origin main
 
 #corefire
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/bc683d31-0f78-4768-9b24-6ea40dadf7d6/deploy-status)](https://app.netlify.com/sites/corefire/deploys)
