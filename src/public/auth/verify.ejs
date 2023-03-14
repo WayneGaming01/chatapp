@@ -12,27 +12,36 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/73d4b4352e.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <style>
     * {
       font-family: "Poppins", sans-serif;
     }
   </style>
-  <body>
+  <body class="dark:bg-main">
     <main
-      class="h-screen flex flex-col justify-center items-center text-centr+er"
+      class="h-screen flex flex-col justify-center items-center text-center"
     >
+      <span
+        id="dark-mode"
+        class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
+      >
+        <i class="fa-solid fa-sun"></i>
+      </span>
       <section class="w-full max-w-xs md:max-w-lg">
-        <div class="text-xl font-medium text-white text-center mb-3">
+        <div class="text-xl font-medium text-neutral-700 dark:text-white text-center mb-3">
           <% if(!error) { %> Your account has been verified! <% } else { %> <%=
           error %> <% } %><br />
-          <span class="text-sm text-zinc-400"
+          <span class="text-sm text-neutral-500"
             >Go back <a href="/" class="underline">here</a></span
           >
         </div>
       </section>
     </main>
-    <script type="module
- src="/library/js/script.js"></script>
+    <script type="module" src="/library/js/script.js"></script>
   </body>
 </html>

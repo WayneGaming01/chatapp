@@ -23,7 +23,10 @@ const userSchema = mongoose.Schema({
       "Minimun password requirement is 6 characters! How can you protect your account like that:/",
     ],
   },
-  vStatus: {
+  avatar: {
+    type: String
+  },
+  EmailVerified: {
     type: String,
   },
   lastIPLogin: {

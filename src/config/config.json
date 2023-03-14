@@ -6,5 +6,10 @@
   "JWT": {
     "JWT_AUTH": "SADAJdsjDSAjsadjASDJksja",
     "JWT_VERIFYTOKEN": "DSAJnjdsjDSAJdsjadjsjADJAJ"
+  },
+  "MAIL_CREDENTIALS": {
+    "MAIL_HOST": "smtp.gmail.com",
+    "MAIL_USER": "waynegg21@gmail.com",
+    "MAIL_PASSWORD": "dpshwygttlpxlpnk"
   }
 }

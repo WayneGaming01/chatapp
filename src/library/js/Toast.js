@@ -4,7 +4,8 @@ const DEFAULT_OPTIONS = {
   onClose: () => {},
   canClose: true,
   showProgress: true,
-  backgroundColor: "default"
+  backgroundColor: "default",
+  setFontSize: "default"
 };
 
 export default class Toast {
@@ -136,6 +137,13 @@ export default class Toast {
       this.#toastElem.style.backgroundColor = "#a855f7";
       this.#toastElem.style.borderColor = "#d8b4fe";
     }
+  }
+
+  set setFontSize(value) {
+    if(value === "default") {
+      this.#toastElem.style.fontSize = "11px";
+    }
+    this.#toastElem.style.fontSize = value;
   }
 
   set pauseOnHover(value) {

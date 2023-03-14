@@ -32,7 +32,7 @@ $(document).ready(function () {
     } else {
       $("html").addClass("dark");
       localStorage.setItem("dark", "true");
-      $("#dark-mode").html('<i class="fa-solid fa-sun"></i>');;
+      $("#dark-mode").html('<i class="fa-solid fa-sun"></i>');
     }
   });
 });

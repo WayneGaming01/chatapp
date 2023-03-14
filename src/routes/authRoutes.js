@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const { Ecredentials, emailinfo } = require("../service/send-email");
+const { Ecredentials } = require("../service/send-email");
 const config = require("../config/config.json");
 const validator = require("email-validator");
 const browser = require("browser-detect");
@@ -120,47 +120,45 @@ router.get("/verify", (req, res) => {
   res.redirect("/login");
 });
 
-router.get("/verify/:id", (req, res, next) => {
+router.get("/verify/:id", async (req, res, next) => {
   const _VERIFICATION_TOKEN = req.params.id;
 
-  if (req.cookies._VERIFICATION_TOKEN) {
-    jwt.verify(
-      _VERIFICATION_TOKEN,
-      config.JWT.JWT_VERIFYTOKEN,
-      async (err, decodedToken) => {
-        if (err) {
-          console.log(err.message);
-          res.render("./auth/verify", {
-            error: "This link has expired",
-          });
-          next();
-        } else {
-          const user = await User.findById(decodedToken.id);
+  jwt.verify(
+    _VERIFICATION_TOKEN,
+    config.JWT.JWT_VERIFYTOKEN,
+    async (err, decodedToken) => {
+      if (err) {
+        console.log(err.message);
+        res.render("./auth/verify", {
+          error: "This link has expired",
+        });
+        next();
+      } else {
+        const user = await User.findById(decodedToken.id);
 
-          if (user.vStatus === "Verified") {
-            res.render("./auth/verify", {
-              error: "Your account is already verified!",
-            });
-          } else {
-            store.remove("_VERIFICATION_TOKEN");
-            User.findOneAndUpdate(
-              { username: user.username },
-              { $set: { vStatus: "Verified" } },
-              { new: true },
-              (err, doc) => {
-                if (err) {
-                  res.render("./auth/verify", { error: err.message });
-                } else {
-                  res.render("./auth/verify", { error: "" });
-                }
+        if (user.EmailVerified === "true") {
+          res.render("./auth/verify", {
+            error: "Your account is already verified!",
+          });
+        } else {
+          res.clearCookie("_VERIFICATION_TOKEN");
+          const _user = await User.findOneAndUpdate(
+            { username: user.username },
+            { $set: { EmailVerified: "true" } },
+            { new: true },
+            function (err, doc) {
+              if (err) {
+                res.render("./auth/verify", { error: err.message });
+              } else {
+                res.render("./auth/verify", { error: "" });
               }
-            );
-          }
-          return next();
+            }
+          );
         }
+        next();
       }
-    );
-  }
+    }
+  );
 
   if (!_VERIFICATION_TOKEN) {
     res.redirect("/");
@@ -208,12 +206,12 @@ router.post("/api/auth/signup", async (req, res, next) => {
         }),
       });
     const lastIPLogin = req.socket.remoteAddress;
-    const vStatus = "notVerified";
+    const EmailVerified = "false";
     const user = await User.create({
       username,
       email,
       password,
-      vStatus,
+      EmailVerified,
       lastIPLogin,
     });
     const _DO_NOT_SHARE_TOKEN = create_DO_NOT_SHARE_TOKEN(user._id);
@@ -224,13 +222,13 @@ router.post("/api/auth/signup", async (req, res, next) => {
       httpOnly: true,
     });
     res.cookie("_VERIFICATION_TOKEN", _VERIFICATION_TOKEN, {
-      expires: "20m",
+      maxAge: 20 * 60 * 1000,
       httpOnly: true,
     });
     res.status(201).json({ user: user._id });
 
     const mailOptions = {
-      from: emailinfo.MAIL_USER,
+      from: config.MAIL_CREDENTIALS.MAIL_USER,
       to: email,
       subject: `Verify your account`,
       html: `Hey! Verify your account here: ${config.CLIENT_URL}/verify/${_VERIFICATION_TOKEN}`,
@@ -295,7 +293,7 @@ router.post("/api/auth/login", async (req, res) => {
         httpOnly: true,
       });
       const mailOptions = {
-        from: emailinfo.MAIL_USER,
+        from: config.MAIL_CREDENTIALS.MAIL_USER,
         to: email,
         subject: `<span>Someone has logged in to your account</span>`,
         html: `Someone has logged in to your account<br><br><span>IP ADDRESS: ${

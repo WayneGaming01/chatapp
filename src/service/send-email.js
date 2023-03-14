@@ -1,19 +1,14 @@
 const NodeMailer = require("nodemailer");
-
-const emailinfo = {
-  MAIL_HOST: "smtp.gmail.com",
-  MAIL_USER: "waynegg21@gmail.com",
-  MAIL_PASSWORD: "dpshwygttlpxlpnk",
-};
+const config = require("../config/config.json");
 
 const Ecredentials = NodeMailer.createTransport({
-  host: emailinfo.MAIL_HOST,
+  host: config.MAIL_CREDENTIALS.MAIL_HOST,
   port: 465,
   secure: true,
   auth: {
-      user: emailinfo.MAIL_USER,
-      pass: emailinfo.MAIL_PASSWORD
+      user: config.MAIL_CREDENTIALS.MAIL_USER,
+      pass: config.MAIL_CREDENTIALS.MAIL_PASSWORD
   }
 });
 
-module.exports = { Ecredentials, emailinfo };
+module.exports = { Ecredentials };

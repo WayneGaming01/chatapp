@@ -5,6 +5,8 @@ module.exports = async () => {
   await mongoose.connect(config.MONGO_CLUSTER, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
   });
   return mongoose;
 };
