@@ -322,7 +322,7 @@ router.post("/api/auth/login", async (req, res) => {
         subject: `Someone has logged in to your account`,
         html: `Someone has logged in to your account<br><br><span>IP ADDRESS: ${
           req.socket.remoteAddress
-        }</span><br>${browser(req.headers["user-agent"])}`,
+        }</span><br>${JSON.stringify(browser(req.headers["user-agent"]))}`,
       };
 
       Ecredentials.sendMail(mailOptions, function (error, info) {

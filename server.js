@@ -10,6 +10,7 @@ const authRoutes = require("./src/routes/authRoutes");
 const mongoose = require("mongoose");
 const { requireAuth, checkUser } = require("./src/middleware/requireAuth");
 require("./src/config/connection")();
+app.set("trust proxy", true);
 app.set("view engine", "ejs");
 app.set("views", "./src/public/");
 app.use(

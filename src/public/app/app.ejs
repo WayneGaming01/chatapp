@@ -12,17 +12,72 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/73d4b4352e.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <style>
     * {
       font-family: "Poppins", sans-serif;
     }
   </style>
-  <body>
-    <% if(user) { %>
-    <span>Welcome, <%= user.email %></span>
-    <span><a href="/logout">Logout</a></span>
-    <% } %>
+  <body class="dark:bg-main">
+    <span
+      id="dark-mode"
+      class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
+    >
+      <i class="fa-solid fa-sun"></i>
+    </span>
+    <nav
+      class="transition ease-in flex items-center bg-neutral-200 dark:bg-neutral-900 p-3 flex-wrap"
+    >
+      <a href="/app" class="transition ease-in p-2 mr-4 inline-flex items-center">
+        <span class="text-xl text-neutral-700 dark:text-neutral-300 font-bold uppercase tracking-wide"
+          ><%= config.CLIENT_NAME %></span
+        >
+      </a>
+      <button
+        class="nav-toggler transition ease-in text-neutral-700 dark:text-white inline-flex p-3 hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded lg:hidden ml-auto dark:hover:text-white outline-none"
+        data-target="#navigation"
+        id="nav-toggler"
+      >
+        <i class="transition ease-in fa-solid fa-bars"></i>
+      </button>
+      <div
+        class="ease-in hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto"
+        id="navigation"
+      >
+        <div
+          class="transition ease-in lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-start justify-start items-start flex flex-col lg:h-auto"
+        >
+          <a
+            href="#"
+            class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-left justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+          >
+            <span>Servers</span>
+          </a>
+          <a
+            href="#"
+            class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+          >
+            <span>Contacts</span>
+          </a>
+          <a
+            href="#"
+            class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+          >
+            <span>Billing</span>
+          </a>
+          <a
+            href="#"
+            class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+          >
+            <span>Settings</span>
+          </a>
+        </div>
+      </div>
+    </nav>
     <script type="module" src="/library/js/script.js"></script>
   </body>
 </html>

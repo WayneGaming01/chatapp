@@ -8,6 +8,27 @@ console.log(
 );
 
 $(document).ready(function () {
+  $("#nav-toggler").on("click", function () {
+    if (!$("#nav-toggler").hasClass("active")) {
+      $(".nav-toggler").addClass("active");
+      $(".nav-toggler").html('<i class="fa-solid fa-xmark"></i>');
+    } else {
+      $(".nav-toggler").removeClass("active");
+      $(".nav-toggler").html(
+        '<i class="transition ease-in fa-solid fa-bars"></i>'
+      );
+    }
+  });
+  
+  $("#nav-toggler").each(function (_, navToggler) {
+    var target = $(navToggler).data("target");
+    $(navToggler).on("click", function () {
+      $(target).animate({
+        height: "toggle",
+      });
+    });
+  });
+
   if (!localStorage.getItem("dark")) {
     if ($("html").hasClass("dark")) {
       localStorage.setItem("dark", "true");
