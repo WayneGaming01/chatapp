@@ -109,15 +109,15 @@ const handleErrors = (err) => {
 
 //get
 router.get("/signup", (req, res) => {
-  if(req.cookies._DO_NOT_SHARE_TOKEN) return res.redirect("/app");
+  if (req.cookies._DO_NOT_SHARE_TOKEN) return res.redirect("/app");
 
-  res.render("./auth/signup");
+  res.render("./auth/signup", { config: config });
 });
 
 router.get("/login", (req, res) => {
-  if(req.cookies._DO_NOT_SHARE_TOKEN) return res.redirect("/app");
-  
-  res.render("./auth/login");
+  if (req.cookies._DO_NOT_SHARE_TOKEN) return res.redirect("/app");
+
+  res.render("./auth/login", { config: config });
 });
 
 router.get("/verify", (req, res) => {
@@ -133,28 +133,39 @@ router.get("/verify/:id", async (req, res, next) => {
     async (err, decodedToken) => {
       if (err) {
         console.log(err.message);
-        res.render("./auth/verify", {
-          error: "This link has expired",
-        });
+        res.render(
+          "./auth/verify",
+          {
+            error: "This link has expired",
+          },
+          { config: config }
+        );
         next();
       } else {
         const user = await User.findById(decodedToken.id);
 
         if (user.EmailVerified === "true") {
-          res.render("./auth/verify", {
-            error: "Your account is already verified!",
-          });
+          res.render(
+            "./auth/verify",
+            {
+              error: "Your account is already verified!",
+            },
+            { config: config }
+          );
         } else {
           res.clearCookie("_VERIFICATION_TOKEN");
-          const _user = await User.findOneAndUpdate(
+          await User.findOneAndUpdate(
             { username: user.username },
             { $set: { EmailVerified: "true" } },
             { new: true },
             function (err, doc) {
               if (err) {
-                res.render("./auth/verify", { error: err.message });
+                res.render("./auth/verify", {
+                  error: err.message,
+                  config: config,
+                });
               } else {
-                res.render("./auth/verify", { error: "" });
+                res.render("./auth/verify", { error: "", config: config });
               }
             }
           );
@@ -285,13 +296,22 @@ router.post("/api/auth/login", async (req, res) => {
     const user = await User.login(email, password);
     const _DO_NOT_SHARE_TOKEN = create_DO_NOT_SHARE_TOKEN(user._id);
 
-    if (User.findOne({ lastIPLogin: req.socket.remoteAddress })) {
+    if (
+      User.findOne({ lastIPLogin: req.socket.remoteAddress }) ===
+      req.socket.remoteAddress
+    ) {
       res.cookie("_DO_NOT_SHARE_TOKEN", _DO_NOT_SHARE_TOKEN, {
         maxAge: 365 * 12 * 60 * 60,
         httpOnly: true,
       });
       res.status(200).json({ user: user._id });
     } else {
+      await User.findOneAndUpdate(
+        { username: user.username },
+        { $set: { lastIPLogin: req.socket.remoteAddress } },
+        { new: true }
+      );
+
       res.cookie("_DO_NOT_SHARE_TOKEN", _DO_NOT_SHARE_TOKEN, {
         maxAge: 365 * 12 * 60 * 60,
         httpOnly: true,
@@ -299,7 +319,7 @@ router.post("/api/auth/login", async (req, res) => {
       const mailOptions = {
         from: config.MAIL_CREDENTIALS.MAIL_USER,
         to: email,
-        subject: `<span>Someone has logged in to your account</span>`,
+        subject: `Someone has logged in to your account`,
         html: `Someone has logged in to your account<br><br><span>IP ADDRESS: ${
           req.socket.remoteAddress
         }</span><br>${browser(req.headers["user-agent"])}`,
@@ -310,7 +330,8 @@ router.post("/api/auth/login", async (req, res) => {
           res.json({ errors: handleErrors(error) });
         } else {
           console.log("Info sent: " + info.response);
-          res.status(200).json({ message: "Info sent successfully" });
+          res.status(200).json({ user: user._id });
+          res.redirect("/app");
         }
       });
     }
