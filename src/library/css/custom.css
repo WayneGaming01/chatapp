@@ -1,3 +1,7 @@
+.dark{
+
+}
+
 /* Toast */
 
 .toast {
@@ -81,12 +85,21 @@
   transform: translateX(-50%);
 }
 
-.dark{
-  transition: property duration transition-timing-function delay;
+@media screen and (max-width: 612px) {
+  .max-w-xs-custom{
+      max-width: 20rem;
+  }
 }
 
-@media screen and (max-width: 612px) {
-    .max-w-xs-custom{
-        max-width: 20rem;
-    }
+@media screen and (max-width: 1022.22px) {
+  #mt-2-custom{
+    margin-top: 0.5rem !important;
+  }
 }
+
+@media screen and (min-width: 1022.23px) {
+  #navigation{
+    display: inline-flex !important;
+  }
+}
+

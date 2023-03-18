@@ -6,5 +6,10 @@
   "JWT": {
     "JWT_AUTH": "",
     "JWT_VERIFYTOKEN": ""
+  },
+  "MAIL_CREDENTIALS": {
+    "MAIL_HOST": "",
+    "MAIL_USER": "",
+    "MAIL_PASSWORD": ""
   }
 }

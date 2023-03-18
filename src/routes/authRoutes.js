@@ -5,6 +5,8 @@ const { Ecredentials } = require("../service/send-email");
 const config = require("../config/config.json");
 const validator = require("email-validator");
 const browser = require("browser-detect");
+const Userdetails = require("../models/Userdetails");
+const fs = require("fs");
 
 const router = Router();
 
@@ -57,6 +59,10 @@ const handleErrors = (err) => {
     email: "",
     password: "",
   };
+
+  if (err.message === "You cannot use this username!") {
+    errors.username = "You cannot use this username!";
+  }
 
   if (err.message === "Mind putting an username? uh..") {
     errors.username = "Mind putting an username? uh..";
@@ -144,7 +150,7 @@ router.get("/verify/:id", async (req, res, next) => {
       } else {
         const user = await User.findById(decodedToken.id);
 
-        if (user.EmailVerified === "true") {
+        if (user.email_verified === "true") {
           res.render(
             "./auth/verify",
             {
@@ -154,9 +160,14 @@ router.get("/verify/:id", async (req, res, next) => {
           );
         } else {
           res.clearCookie("_VERIFICATION_TOKEN");
+          await Userdetails.findOneAndUpdate(
+            { username: user.username },
+            { $set: { email_verified: "true" } },
+            { new: true }
+          );
           await User.findOneAndUpdate(
             { username: user.username },
-            { $set: { EmailVerified: "true" } },
+            { $set: { email_verified: "true" } },
             { new: true },
             function (err, doc) {
               if (err) {
@@ -184,7 +195,11 @@ router.get("/verify/:id", async (req, res, next) => {
 router.post("/api/auth/signup", async (req, res, next) => {
   const { username, email, password, cpassword } = req.body;
 
-  if (!username) {
+  if (username === "all") {
+    return res.json({
+      errors: handleErrors({ message: "You cannot use this username!" }),
+    });
+  } else if (!username) {
     return res.json({
       errors: handleErrors({ message: "Mind putting an username? uh.." }),
     });
@@ -221,13 +236,31 @@ router.post("/api/auth/signup", async (req, res, next) => {
         }),
       });
     const lastIPLogin = req.socket.remoteAddress;
-    const EmailVerified = "false";
+    const email_verified = "false";
+    const avatar = "/default.png";
+    fs.mkdirSync(`../library/img/user/${username}/profile`);
+    fs.copyFileSync("../library/img/website/default.png", `../library/img/user/${username}/profile`);
+    const is_admin = "false";
+    const profile_url = `/u/${username}`;
+    const created_at = new Date.now();
+    const bio = "";
     const user = await User.create({
       username,
       email,
       password,
-      EmailVerified,
+      avatar,
+      email_verified,
       lastIPLogin,
+      created_at,
+    });
+    await Userdetails.create({
+      username,
+      avatar,
+      profile_url,
+      is_admin,
+      bio,
+      email_verified,
+      created_at,
     });
     const _DO_NOT_SHARE_TOKEN = create_DO_NOT_SHARE_TOKEN(user._id);
     const _VERIFICATION_TOKEN = create_VERIFICATION_TOKEN(user._id);

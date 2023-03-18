@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/library/css/main.css" />
+    <link rel="stylesheet" href="/library/css/custom.css" />
     <title><%= config.CLIENT_NAME %></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,8 +33,12 @@
     <nav
       class="transition ease-in flex items-center bg-neutral-200 dark:bg-neutral-900 p-3 flex-wrap"
     >
-      <a href="/app" class="transition ease-in p-2 mr-4 inline-flex items-center">
-        <span class="text-xl text-neutral-700 dark:text-neutral-300 font-bold uppercase tracking-wide"
+      <a
+        href="/app"
+        class="transition ease-in p-2 mr-4 inline-flex items-center"
+      >
+        <span
+          class="text-xl text-neutral-700 dark:text-neutral-300 font-bold uppercase tracking-wide"
           ><%= config.CLIENT_NAME %></span
         >
       </a>
@@ -49,7 +54,7 @@
         id="navigation"
       >
         <div
-          class="transition ease-in lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-start justify-start items-start flex flex-col lg:h-auto"
+          class="transition ease-in lg:inline-flex lg:flex-row lg:w-auto w-full lg:items-start justify-start items-start flex flex-col lg:h-auto"
         >
           <a
             href="#"
@@ -75,6 +80,13 @@
           >
             <span>Settings</span>
           </a>
+        </div>
+        <div class="top-navbar flex-col flex lg:inline-flex ml-auto flex-row">
+          <span
+            id="mt-2-custom"
+            class="cursor-pointer select-none transition ease-in text-neutral-700 lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 bg-neutral-300 hover:bg-neutral-400 hover:dark:bg-neutral-700 dark:bg-neutral-800"
+            >Welcome, <%= user.username %>!
+          </span>
         </div>
       </div>
     </nav>

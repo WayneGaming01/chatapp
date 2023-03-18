@@ -26,12 +26,15 @@ const userSchema = mongoose.Schema({
   avatar: {
     type: String
   },
-  EmailVerified: {
+  email_verified: {
     type: String,
   },
   lastIPLogin: {
     type: String,
   },
+  created_at: {
+    type: String,
+  }
 });
 
 userSchema.post("save", function (doc) {
