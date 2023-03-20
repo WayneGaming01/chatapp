@@ -1,3 +1,19 @@
+.profile_modal {
+  transition: opacity 0.25s ease;
+}
+
+.addserver_modal {
+  transition: opacity 0.25s ease;
+}
+
+.createserver_modal {
+  transition: opacity 0.25s ease;
+}
+
+.addaserver_modal {
+  transition: opacity 0.25s ease;
+}
+
 .transition-fade {
   transition: 0.1s;
 }
@@ -90,32 +106,31 @@ html.is-animating .transition-fade {
 }
 
 @media screen and (max-width: 612px) {
-  .max-w-xs-custom{
-      max-width: 20rem;
+  .max-w-xs-custom {
+    max-width: 20rem;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .text-left-custom{
+  .text-left-custom {
     text-align: left !important;
   }
 }
 
 @media screen and (max-width: 1022.22px) {
-  #mt-2-custom{
+  #mt-2-custom {
     margin-top: 0.5rem !important;
   }
 }
 
 @media screen and (min-width: 1022.23px) {
-  #navigation{
+  #navigation {
     display: inline-flex !important;
   }
 }
 
 @media screen and (max-width: 1275px) {
-  .max-w-xs-custom-2{
+  .max-w-xs-custom-2 {
     max-width: 20rem;
+  }
 }
-}
-

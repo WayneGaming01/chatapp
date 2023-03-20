@@ -1,46 +1,34 @@
-const mongoose = require("mongoose");   
+const mongoose = require("mongoose");
 const config = require("../config/config.json");
 const moment = require("moment");
 
-const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
-// function generateChar(length) {
-//     let result = ' ';
-//     const charactersLength = characters.length;
-//     for ( let i = 0; i < length; i++ ) {
-//         result += characters.charAt(Math.floor(Math.random() * charactersLength));
-//     }
-
-//     return result;
-// }
-
-
-const userSchema = mongoose.Schema({
-    server_name: {
-        type: String,
-    },
-    server_bio: {
-        type: String,
-    },
-    members_count: {
-        type: Number,
-    },
-    server_avatar: {
-        type: String,
-    },
-    server_link: {
-        type: String,
-    },
-    created_at: {
-        type: String,
-        default: moment().format("MMMM Do YYYY"),
-    }
+const serverSchema = mongoose.Schema({
+  server_name: {
+    type: String,
+  },
+  server_bio: {
+    type: String,
+  },
+  members_count: {
+    type: Number,
+  },
+  server_avatar: {
+    type: String,
+  },
+  server_link: {
+    type: String,
+    unique: true,
+  },
+  server_owner: {
+    type: String,
+  },
+  users: [{ type: mongoose.Schema.Types.ObjectId, ref: "userdetails" }],
+  created_at: {
+    type: String,
+    default: moment().format("MMMM Do YYYY"),
+  },
 });
 
-userSchema.post("save", function (doc) {
-  console.log(`A new server was created ${doc}`);
-});
-
-const Server = mongoose.model("server", userSchema);
+const Server = mongoose.model("server", serverSchema);
 
 module.exports = Server;

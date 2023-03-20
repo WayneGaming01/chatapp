@@ -5,7 +5,7 @@ const userdetailsSchema = mongoose.Schema({
     type: String,
   },
   avatar: {
-    type: String
+    type: String,
   },
   profile_url: {
     type: String,
@@ -16,18 +16,16 @@ const userdetailsSchema = mongoose.Schema({
   bio: {
     type: String,
   },
-  servers_count: {
-    type: Number,
-  },
   friends_count: {
     type: Number,
   },
   email_verified: {
     type: String,
   },
+  servers: [{ type: mongoose.Schema.Types.ObjectId, ref: "server" }],
   created_at: {
     type: String,
-  }
+  },
 });
 
 const Userdetails = mongoose.model("userdetails", userdetailsSchema);

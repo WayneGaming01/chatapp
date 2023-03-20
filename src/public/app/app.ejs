@@ -23,19 +23,11 @@
     * {
       font-family: "Poppins", sans-serif;
     }
-
-    .profile_modal {
-      transition: opacity 0.25s ease;
-    }
-
-    .addserver_modal {
-      transition: opacity 0.25s ease;
-    }
   </style>
   <body class="dark:bg-main duration-75 transition ease-in">
     <main class="transition-fade" id="swup">
-      <%- include("./components/header.ejs") %> 
-      <%- include("./components/dark-mode.ejs") %>
+      <%- include("./components/header.ejs") %> <%-
+      include("./components/dark-mode.ejs") %>
       <section>
         <span
           class="text-neutral-700 dark:text-white text-3xl font-bold flex mt-8 ml-8 p-4 max-w-xs-custom text-center"
@@ -47,7 +39,7 @@
           >
             <div class="flex justify-between">
               <span class="dark:text-white text-neutral-700 text-2xl">
-                Server lists
+                Your servers
               </span>
               <span
                 class="addserver_modal-open text-center transition ease-in cursor-pointer dark:text-neutral-300 dark:hover:text-neutral-400"
@@ -55,19 +47,18 @@
               ></span>
             </div>
 
-            <!-- cards -->
             <div class="grid gap-4 xl:grid-cols-3 max-w-xs-custom-2 flex-wrap">
-              <a href="">
+              <% user__.servers.forEach(server => { %>
+              <!-- cards -->
+              <a href="/servers/<%= server._id %>">
                 <div
                   class="transition ease-in max-w-sm rounded overflow-hidden shadow-lg mt-5 hover:shadow-2xl"
                 >
-                  <div
-                    class="z-1 w-full hover:filter blur transition duration-500 ease-in-out filter-none"
-                  >
+                  <div class="z-1 w-full">
                     <img
-                      src="/library/img/website/default.png"
-                      alt="Background Image"
-                      class="h-24 sm:h-32 w-full object-cover"
+                      src="/api/v1/servers/<%= server._id %>/avatar/<%= server.avatar %>"
+                      alt="Avatar"
+                      class="h-24 sm:h-32 w-full object-cover hover:filter blur transition duration-500 ease-in-out filter-none"
                     />
                   </div>
                   <div
@@ -76,21 +67,24 @@
                     <div class="dark:text-white font-bold text-xl mb-2">
                       <span
                         class="dark:text-white text-neutral-300 transition ease-in break-all"
-                        >Test</span
+                        ><%= server.server_name %></span
                       >
                     </div>
                     <p
                       class="dark:text-neutral-200 text-neutral-300 text-base break-all"
                     >
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                      exercitationem praesentium nihil.
+                      <%= server.server_bio %>
                     </p>
                   </div>
                 </div>
               </a>
+              <% })%> <% if(server._id !== user_.servers.arrayTo) { %>
+              <span
+                class="text-xl text-neutral-700 font-medium dark:text-neutral-300 mt-12"
+                >There's nothing to show here</span
+              >
+              <% } %>
             </div>
-            <!-- <span class="text-xl text-neutral-700 font-medium dark:text-neutral-300 mt-12">There's nothing to show here</span> -->
 
             <a href="/servers">
               <input
@@ -103,8 +97,10 @@
         </div>
       </section>
 
-      <%- include("./components/profile-modal.ejs") %>
-      <%- include("./components/addserver-modal.ejs") %>
+      <%- include("./components/profile-modal.ejs") %> <%-
+      include("./components/addserver-modal.ejs") %><%-
+      include("./components/createserver-modal.ejs") %> <%-
+      include("./components/addaserver-modal.ejs") %>
     </main>
     <script src="https://unpkg.com/swup@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>

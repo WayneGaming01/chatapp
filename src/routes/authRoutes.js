@@ -140,25 +140,19 @@ router.get("/verify/:id", async (req, res, next) => {
     async (err, decodedToken) => {
       if (err) {
         console.log(err.message);
-        res.render(
-          "./auth/verify",
-          {
-            error: "This link has expired",
-          },
-          { config: config }
-        );
+        res.render("./auth/verify", {
+          error: "This link has expired",
+          config: config,
+        });
         next();
       } else {
         const user = await User.findById(decodedToken.id);
 
         if (user.email_verified === "true") {
-          res.render(
-            "./auth/verify",
-            {
-              error: "Your account is already verified!",
-            },
-            { config: config }
-          );
+          res.render("./auth/verify", {
+            error: "Your account is already verified!",
+            config: config,
+          });
         } else {
           res.clearCookie("_VERIFICATION_TOKEN");
           await Userdetails.findOneAndUpdate(
@@ -239,17 +233,19 @@ router.post("/api/auth/signup", async (req, res, next) => {
     const lastIPLogin = req.socket.remoteAddress;
     const email_verified = false;
     const avatar = "/default.png";
-    const userpath = `./src/library/img/user/${username}`;
+    const userpath = `./src/api/users/${username}`;
     await fs.mkdirSync(userpath);
     await fs.mkdirSync(`${userpath}/profile`);
     await fs.copyFileSync(
-      "./src/library/img/website/default.png",
-      `${userpath}/profile/default.png`
+      `./src/library/img/website${avatar}`,
+      `${userpath}/profile${avatar}`
     );
     const is_admin = false;
     const profile_url = `/u/${username}`;
     const created_at = moment().format("MMMM Do YYYY, h:mm:ss a");
     const bio = "";
+    const friends_count = 0;
+    const servers_count = 0;
     const user = await User.create({
       username,
       email,
@@ -265,6 +261,8 @@ router.post("/api/auth/signup", async (req, res, next) => {
       profile_url,
       is_admin,
       bio,
+      servers_count,
+      friends_count,
       email_verified,
       created_at,
     });

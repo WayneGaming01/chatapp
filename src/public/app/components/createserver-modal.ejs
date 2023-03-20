@@ -28,8 +28,10 @@
         </div>
       </div>
       <form action="" method="POST" id="create-serverform">
-        <input id="server-name" type="text" placeholder="Server name" class="placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg">
-        <textarea cols="3" rows="3" id="server-bio" type="text" placeholder="Server bio" class="mt-2 placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg"></textarea>
+        <label for="server-name" class="font-bold dark:text-neutral-300 text-neutral-700">Server name</label>
+        <input id="server-name" type="text" placeholder="<%= user_.username %>'s server" class="mb-2 placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg">
+        <label for="server-name" class="font-bold dark:text-neutral-300 text-neutral-700">Server bio</label>
+        <textarea cols="3" rows="3" id="server-bio" type="text" placeholder="Welcome to my cool server!" class="placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg"></textarea>
         <button
           type="submit"
           id="create-server"
