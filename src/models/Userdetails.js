@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const config = require("../config/config.json");
 
 const userdetailsSchema = mongoose.Schema({
   username: {
@@ -12,6 +11,9 @@ const userdetailsSchema = mongoose.Schema({
     type: String,
   },
   is_admin: {
+    type: String,
+  },
+  bio: {
     type: String,
   },
   email_verified: {

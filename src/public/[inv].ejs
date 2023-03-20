@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/library/css/main.css" />
-    <title>Verify - <%= config.CLIENT_NAME %></title>
+    <title>Invite - <%= config.CLIENT_NAME %></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,18 +22,13 @@
       font-family: "Poppins", sans-serif;
     }
   </style>
-  <body class="dark:bg-main">
+  <body class="dark:bg-main duration-75 transition ease-in">
     <main
       class="h-screen flex flex-col justify-center items-center text-center transition-fade"
       id="swup"
     >
       >
-      <span
-        id="dark-mode"
-        class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
-      >
-        <i class="fa-solid fa-sun"></i>
-      </span>
+      <%- include("./components/dark-mode.ejs") %>
       <section class="w-full max-w-xs md:max-w-lg">
         <div
           class="text-xl font-medium text-neutral-700 dark:text-white text-center mb-3"

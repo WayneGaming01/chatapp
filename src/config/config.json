@@ -3,6 +3,7 @@
   "MONGO_CLUSTER": "mongodb+srv://admin:tPcknggYPAWS1DLA@cluster0.du5g8rv.mongodb.net/chatapp",
   "CLIENT_URL": "http://localhost:3000",
   "CLIENT_NAME": "CoreFire",
+  "CLIENT_NAME_lowercase": "corefire",
   "JWT": {
     "JWT_AUTH": "SADAJdsjDSAjsadjASDJksja",
     "JWT_VERIFYTOKEN": "DSAJnjdsjDSAJdsjadjsjADJAJ"

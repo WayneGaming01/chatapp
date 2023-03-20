@@ -1,5 +1,9 @@
-.dark{
+.transition-fade {
+  transition: 0.1s;
+}
 
+html.is-animating .transition-fade {
+  opacity: 0;
 }
 
 /* Toast */
@@ -88,6 +92,12 @@
 @media screen and (max-width: 612px) {
   .max-w-xs-custom{
       max-width: 20rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .text-left-custom{
+    text-align: left !important;
   }
 }
 

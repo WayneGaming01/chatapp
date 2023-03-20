@@ -28,6 +28,7 @@ app.use(
 );
 app.use("/library/js", express.static("./src/library/js"));
 app.use("/library/css", express.static("./src/library/css"));
+app.use("/library/img", express.static("./src/library/img"));
 app.use("/routes/email/templates", express.static("./src/routes/templates"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

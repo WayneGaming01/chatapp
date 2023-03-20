@@ -236,13 +236,18 @@ router.post("/api/auth/signup", async (req, res, next) => {
         }),
       });
     const lastIPLogin = req.socket.remoteAddress;
-    const email_verified = "false";
+    const email_verified = false;
     const avatar = "/default.png";
-    fs.mkdirSync(`../library/img/user/${username}/profile`);
-    fs.copyFileSync("../library/img/website/default.png", `../library/img/user/${username}/profile`);
-    const is_admin = "false";
+    const userpath = `./src/library/img/user/${username}`;
+    await fs.mkdirSync(userpath);
+    await fs.mkdirSync(`${userpath}/profile`);
+    await fs.copyFileSync(
+      "./src/library/img/website/default.png",
+      `${userpath}/profile/default.png`
+    );
+    const is_admin = false;
     const profile_url = `/u/${username}`;
-    const created_at = new Date.now();
+    const created_at = new Date();
     const bio = "";
     const user = await User.create({
       username,
