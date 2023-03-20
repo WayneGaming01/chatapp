@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/library/css/main.css" />
+    <link rel="stylesheet" href="/library/css/custom.css" />
+    <title><%= user_.username %>'s Profile - <%= config.CLIENT_NAME %></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/73d4b4352e.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <style>
+    * {
+      font-family: "Poppins", sans-serif;
+    }
+  </style>
+  <body class="dark:bg-main duration-75 transition ease-in">
+    <main class="transition-fade" id="swup">
+      <%- include("./app/components/dark-mode.ejs") %>
+      <nav
+        class="transition ease-in flex items-center bg-neutral-200 dark:bg-neutral-900 p-3 flex-wrap"
+      >
+        <a
+          href="/"
+          class="transition ease-in p-2 mr-4 inline-flex items-center"
+        >
+          <span
+            class="text-xl text-neutral-700 dark:text-neutral-300 font-bold uppercase tracking-wide"
+            ><%= config.CLIENT_NAME %></span
+          >
+        </a>
+        <button
+          class="nav-toggler transition ease-in text-neutral-700 dark:text-white inline-flex p-3 hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded lg:hidden ml-auto dark:hover:text-white outline-none"
+          data-target="#navigation"
+          id="nav-toggler"
+        >
+          <i class="transition ease-in fa-solid fa-bars"></i>
+        </button>
+        <div
+          class="ease-in hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto"
+          id="navigation"
+        >
+          <div
+            class="transition ease-in lg:inline-flex lg:flex-row lg:w-auto w-full lg:items-start justify-start items-start flex flex-col lg:h-auto"
+          >
+            <a
+              href="/download"
+              class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
+            >
+              <span>Download</span>
+            </a>
+          </div>
+          <div class="top-navbar flex-col flex lg:inline-flex ml-auto flex-row">
+            <% if(user) { %>
+            <a href="/app">
+              <button
+                type="button"
+                id="mt-2-custom"
+                class="cursor-pointer select-none transition ease-in text-neutral-700 lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 bg-neutral-300 hover:bg-neutral-400 hover:dark:bg-neutral-700 dark:bg-neutral-800"
+              >
+                Open <%= config.CLIENT_NAME %>
+              </button>
+            </a>
+            <% } else { %>
+            <a href="/login">
+              <button
+                type="button"
+                id="mt-2-custom"
+                class="cursor-pointer select-none transition ease-in text-neutral-700 lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 bg-neutral-300 hover:bg-neutral-400 hover:dark:bg-neutral-700 dark:bg-neutral-800"
+              >
+                Login
+              </button>
+            </a>
+            <% } %>
+          </div>
+        </div>
+      </nav>
+      <section>
+        <div class="flex items-center p-10">
+          <img
+            src="/library/img/user/<%= user_.username %>/profile<%= user_.avatar %>"
+            alt="Profile"
+            class="h-24 w-24 rounded-full p-1"
+          />
+          <span
+            class="text-neutral-700 dark:text-white text-3xl font-bold flex p-2 max-w-xs-custom text-center"
+          >
+            <%= user_.username %></span
+          >
+        </div>
+        <div class="flex justify-start items-start flex-col">
+          <div class="rounded-md flex flex-col p-7 p-7 mb-5 w-full h-full overflow-hidden">
+            <div class="flex justify-between">
+              <span class="dark:text-white text-neutral-700 text-2xl">
+                <%= user_.username %>'s Profile
+              </span>
+            </div>
+
+            <div
+              class="bg-neutral-300 dark:bg-neutral-800 p-4 rounded-md mb-5 mt-5"
+            >
+              <span class="dark:text-white text-sm text-neutral-700">
+                <% if(user_.bio === "") { %> There's nothing to show here. <% }
+                else { %> <%= user_.bio %> <% } %>
+              </span>
+              <br />
+              <h1
+                class="mt-5 text-md capitalize font-medium dark:text-white text-neutral-700"
+              >
+                Account created
+              </h1>
+              <p class="text-sm dark:text-white text-neutral-700">
+                <%= user_.created_at %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="https://unpkg.com/swup@3"></script>
+    <script type="module" src="/library/js/script.js"></script>
+  </body>
+</html>

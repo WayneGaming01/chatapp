@@ -113,3 +113,9 @@ html.is-animating .transition-fade {
   }
 }
 
+@media screen and (max-width: 1275px) {
+  .max-w-xs-custom-2{
+    max-width: 20rem;
+}
+}
+

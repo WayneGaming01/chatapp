@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <link rel="stylesheet" href="/library/css/main.css" />
     <link rel="stylesheet" href="/library/css/custom.css" />
     <title><%= config.CLIENT_NAME %></title>
@@ -23,14 +24,9 @@
       font-family: "Poppins", sans-serif;
     }
   </style>
-  <body class="dark:bg-main">
+  <body class="dark:bg-main duration-75 transition ease-in">
     <main class="transition-fade" id="swup">
-      <span
-        id="dark-mode"
-        class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
-      >
-        <i class="fa-solid fa-sun"></i>
-      </span>
+      <%- include("./app/components/dark-mode.ejs") %>
       <nav
         class="transition ease-in flex items-center bg-neutral-200 dark:bg-neutral-900 p-3 flex-wrap"
       >

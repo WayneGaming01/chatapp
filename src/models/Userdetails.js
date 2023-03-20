@@ -16,6 +16,12 @@ const userdetailsSchema = mongoose.Schema({
   bio: {
     type: String,
   },
+  servers_count: {
+    type: Number,
+  },
+  friends_count: {
+    type: Number,
+  },
   email_verified: {
     type: String,
   },

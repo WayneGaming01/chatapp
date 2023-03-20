@@ -2,19 +2,19 @@ const mongoose = require("mongoose");
 const config = require("../config/config.json");
 const moment = require("moment");
 
-const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+// const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-function generateChar(length) {
-    let result = ' ';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
+// function generateChar(length) {
+//     let result = ' ';
+//     const charactersLength = characters.length;
+//     for ( let i = 0; i < length; i++ ) {
+//         result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
-const userSchema = mongoose.Schema({
+const inviteSchema = mongoose.Schema({
     user_invite: {
         type: String,
     },
@@ -33,10 +33,10 @@ const userSchema = mongoose.Schema({
     }
 });
 
-userSchema.post("save", function (doc) {
+inviteSchema.post("save", function (doc) {
   console.log(`A new server was created ${doc}`);
 });
 
-const Server = mongoose.model("server", userSchema);
+const Invite = mongoose.model("invite", inviteSchema);
 
-module.exports = Server;
+module.exports = Invite;

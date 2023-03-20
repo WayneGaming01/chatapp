@@ -3,11 +3,74 @@ import "https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js";
 import Toast from "/library/js/Toast.js";
 const swup = new Swup();
 
+console.log(
+  "%cDon't paste anything here!",
+  "color:red; font-family: monospace; font-size:24px"
+);
+
 const init = () => {
-  console.log(
-    "%cDon't paste anything here!",
-    "color:red; font-family: monospace; font-size:24px"
-  );
+  if (document.querySelector(".addserver_modal-overlay")) {
+    var openmodal = document.querySelectorAll(".addserver_modal-open");
+    for (var i = 0; i < openmodal.length; i++) {
+      openmodal[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        addserver_toggleModal();
+      });
+    }
+  }
+
+  if (
+    document.querySelector(".addserver_modal-overlay") &&
+    document.querySelector(".addserver_modal-close")
+  ) {
+    const overlay = document.querySelector(".addserver_modal-overlay");
+    overlay.addEventListener("click", addserver_toggleModal);
+
+    var closemodal = document.querySelectorAll(".addserver_modal-close");
+    for (var i = 0; i < closemodal.length; i++) {
+      closemodal[i].addEventListener("click", addserver_toggleModal);
+    }
+  }
+
+  function addserver_toggleModal() {
+    const body = document.querySelector("body");
+    const modal = document.querySelector(".addserver_modal");
+    modal.classList.toggle("opacity-0");
+    modal.classList.toggle("pointer-events-none");
+    body.classList.toggle("addserver_modal-active");
+  }
+
+  //profile modal
+  if (document.querySelector(".profile_modal-overlay")) {
+    var openmodal = document.querySelectorAll(".profile_modal-open");
+    for (var i = 0; i < openmodal.length; i++) {
+      openmodal[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        profile_toggleModal();
+      });
+    }
+  }
+
+  if (
+    document.querySelector(".profile_modal-overlay") &&
+    document.querySelector(".profile_modal-close")
+  ) {
+    const overlay = document.querySelector(".profile_modal-overlay");
+    overlay.addEventListener("click", profile_toggleModal);
+
+    var closemodal = document.querySelectorAll(".profile_modal-close");
+    for (var i = 0; i < closemodal.length; i++) {
+      closemodal[i].addEventListener("click", profile_toggleModal);
+    }
+  }
+
+  function profile_toggleModal() {
+    const body = document.querySelector("body");
+    const modal = document.querySelector(".profile_modal");
+    modal.classList.toggle("opacity-0");
+    modal.classList.toggle("pointer-events-none");
+    body.classList.toggle("profile_modal-active");
+  }
 
   if (document.querySelector("#signupform")) {
     $("#signupform").submit(async function (e) {
@@ -34,7 +97,7 @@ const init = () => {
         console.log(data);
         if (data.errors) {
           if (data.errors.username) {
-            const toast = new Toast({
+            new Toast({
               text: data.errors.username,
               position: "bottom-right",
               canClose: false,
@@ -44,7 +107,7 @@ const init = () => {
           }
 
           if (data.errors.email) {
-            const toast = new Toast({
+            new Toast({
               text: data.errors.email,
               position: "bottom-right",
               canClose: false,
@@ -53,7 +116,7 @@ const init = () => {
           }
 
           if (data.errors.password) {
-            const toast = new Toast({
+            new Toast({
               text: data.errors.password,
               position: "bottom-right",
               canClose: false,
@@ -62,7 +125,7 @@ const init = () => {
           }
         }
         if (data.user) {
-          const toast = new Toast({
+          new Toast({
             text: "Signing up...",
             position: "bottom-right",
             canClose: false,
@@ -78,7 +141,7 @@ const init = () => {
           $("#cpassword").prop("disabled", true);
           $("#signup").prop("disabled", true);
           setTimeout(() => {
-            const toast = new Toast({
+            new Toast({
               text: "Done! Check your email.",
               position: "bottom-right",
               canClose: false,
@@ -118,7 +181,7 @@ const init = () => {
         console.log(data);
         if (data.errors) {
           if (data.errors.email) {
-            const toast = new Toast({
+            new Toast({
               text: data.errors.email,
               position: "bottom-right",
               canClose: false,
@@ -128,7 +191,7 @@ const init = () => {
           }
 
           if (data.errors.password) {
-            const toast = new Toast({
+            new Toast({
               text: data.errors.password,
               position: "bottom-right",
               canClose: false,
@@ -138,7 +201,7 @@ const init = () => {
           }
         }
         if (data.user) {
-          const toast = new Toast({
+          new Toast({
             text: "Logging in...",
             position: "bottom-right",
             canClose: false,
@@ -199,6 +262,7 @@ const init = () => {
     $("html").addClass("dark");
     $("#dark-mode").html('<i class="fa-solid fa-sun"></i>');
   }
+
   if (document.querySelector("#dark-mode")) {
     $("#dark-mode").on("click", function () {
       if ($("html").hasClass("dark")) {

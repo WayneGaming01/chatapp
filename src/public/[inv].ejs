@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <link rel="stylesheet" href="/library/css/main.css" />
     <title>Invite - <%= config.CLIENT_NAME %></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,17 +28,20 @@
       class="h-screen flex flex-col justify-center items-center text-center transition-fade"
       id="swup"
     >
-      >
-      <%- include("./components/dark-mode.ejs") %>
+      <%- include("./app/components/dark-mode.ejs") %>
       <section class="w-full max-w-xs md:max-w-lg">
-        <div
-          class="text-xl font-medium text-neutral-700 dark:text-white text-center mb-3"
-        >
-          <% if(!error) { %> Your account has been verified! <% } else { %> <%=
-          error %> <% } %><br />
-          <span class="text-sm text-neutral-500"
+        <div class="dark:bg-neutral-700 bg-neutral-400 p-4 rounded-sm">
+          <% if(server.server_name) { %> <% } else { %>
+          <div
+            class="text-xl font-medium text-neutral-700 dark:text-neutral-300 text-center mb-3"
+          >
+            It looks like the server that you're trying to join does not exist,
+            or the invite link itself has already expired.
+          </div>
+          <span class="text-sm text-neutral-800 dark:text-neutral-400"
             >Go back <a href="/" class="underline">here</a></span
           >
+          <% } %>
         </div>
       </section>
     </main>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <link rel="stylesheet" href="/library/css/main.css" />
     <title>Signup - <%= config.CLIENT_NAME %></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +24,7 @@
       font-family: "Poppins", sans-serif;
     }
   </style>
-  <body class="dark:bg-main">
+  <body class="dark:bg-main duration-75 transition ease-in">
     <main class="transition-fade" id="swup">
       <section>
         <span
@@ -32,12 +33,7 @@
             ><i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Back to home</a
           ></span
         >
-        <span
-          id="dark-mode"
-          class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
-        >
-          <i class="fa-solid fa-sun"></i>
-        </span>
+        <%- include("../app/components/dark-mode.ejs") %>
         <main class="flex justify-center items-center h-screen">
           <section>
             <div class="container mx-auto max-w-xs-custom">

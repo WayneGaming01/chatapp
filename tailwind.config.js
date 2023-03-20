@@ -1,6 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/public/*.{ejs,html,js}", "./src/public/*/*.{ejs,html,js}"],
+  content: [
+    "./src/public/*.{ejs,html,js}",
+    "./src/public/*/*.{ejs,html,js}",
+    "./src/public/*/*/*.{ejs,html,js}",
+    "./src/public/*/*/*/*.{ejs,html,js}",
+    "./src/public/*/*/*/*.{ejs,html,js}",
+    "./src/public/*/*/*/*/*.{ejs,html,js}",
+    "./src/public/*/*/*/*/*/*.{ejs,html,js}",
+  ],
   darkMode: "class",
   theme: {
     extend: {
@@ -9,7 +17,7 @@ module.exports = {
         main: "#1a1a1a",
         dark: {
           background: "#141414",
-        }
+        },
       },
     },
   },

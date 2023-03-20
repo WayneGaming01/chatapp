@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <link rel="stylesheet" href="/library/css/main.css" />
     <link rel="stylesheet" href="/library/css/custom.css" />
     <title><%= config.CLIENT_NAME %></title>
@@ -23,83 +24,9 @@
       font-family: "Poppins", sans-serif;
     }
   </style>
-  <body class="dark:bg-main">
+  <body class="dark:bg-main duration-75 transition ease-in">
     <main class="transition-fade" id="swup">
-      <span
-        id="dark-mode"
-        class="cursor-pointer bottom-0 left-0 absolute overflow-hidden text-neutral-500 dark:text-neutral-200 p-4 text-neutral-500 dark:text-white rounded-full"
-      >
-        <i class="fa-solid fa-sun"></i>
-      </span>
-      <nav
-        class="transition ease-in flex items-center bg-neutral-200 dark:bg-neutral-900 p-3 flex-wrap"
-      >
-        <a
-          href="/app"
-          class="transition ease-in p-2 mr-4 inline-flex items-center"
-        >
-          <span
-            class="text-xl text-neutral-700 dark:text-neutral-300 font-bold uppercase tracking-wide"
-            ><%= config.CLIENT_NAME %></span
-          >
-        </a>
-        <button
-          class="nav-toggler transition ease-in text-neutral-700 dark:text-white inline-flex p-3 hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded lg:hidden ml-auto dark:hover:text-white outline-none"
-          data-target="#navigation"
-          id="nav-toggler"
-        >
-          <i class="transition ease-in fa-solid fa-bars"></i>
-        </button>
-        <div
-          class="ease-in hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto"
-          id="navigation"
-        >
-          <div
-            class="transition ease-in lg:inline-flex lg:flex-row lg:w-auto w-full lg:items-start justify-start items-start flex flex-col lg:h-auto"
-          >
-            <a
-              href="/servers"
-              class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-left justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
-            >
-              <span>Servers</span>
-            </a>
-            <a
-              href="/friends"
-              class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
-            >
-              <span>Friends</span>
-            </a>
-            <a
-              href="/billing"
-              class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
-            >
-              <span>Billing</span>
-            </a>
-            <a
-              href="/settings"
-              class="transition ease-in text-neutral-700 lg:inline-flex lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 items-center justify-center hover:bg-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-white"
-            >
-              <span>Settings</span>
-            </a>
-          </div>
-          <div class="top-navbar flex-col flex lg:inline-flex ml-auto flex-row">
-            <button
-              type="button"
-              data-te-toggle="modal"
-              data-te-target="#profileModal"
-              id="mt-2-custom"
-              class="cursor-pointer select-none transition ease-in text-neutral-700 lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 bg-neutral-300 hover:bg-neutral-400 hover:dark:bg-neutral-700 dark:bg-neutral-800"
-            >
-              <img
-                src="/library/img/user/<%= user.username %>/profile/<%= user.avatar %>"
-                alt="profile"
-                class="h-5 rounded-full inline-flex"
-              />
-              Welcome, <%= user.username %>!
-            </button>
-          </div>
-        </div>
-      </nav>
+      <%- include("./components/header.ejs") %>
     </main>
     <script src="https://unpkg.com/swup@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>

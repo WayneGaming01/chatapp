@@ -7,6 +7,7 @@ const validator = require("email-validator");
 const browser = require("browser-detect");
 const Userdetails = require("../models/Userdetails");
 const fs = require("fs");
+const moment = require("moment");
 
 const router = Router();
 
@@ -247,7 +248,7 @@ router.post("/api/auth/signup", async (req, res, next) => {
     );
     const is_admin = false;
     const profile_url = `/u/${username}`;
-    const created_at = new Date();
+    const created_at = moment().format("MMMM Do YYYY, h:mm:ss a");
     const bio = "";
     const user = await User.create({
       username,
