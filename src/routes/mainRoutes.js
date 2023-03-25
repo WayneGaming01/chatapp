@@ -43,21 +43,25 @@ router.get("/app", requireAuth, checkUser, async (req, res, next) => {
       _DO_NOT_SHARE_TOKEN,
       config.JWT.JWT_AUTH,
       async (err, decodedToken) => {
-        const user_ = await User.findById(decodedToken.id);
-        const user = await Userdetails.findOne({
-          username: user_.username,
-        }).populate("servers");
+        if (err) return res.send(err);
 
+        const user = await User.findById(decodedToken.id);
+        const user_ = await Userdetails.findOne({
+          username: user.username,
+        }).populate("servers");
+        const user_1 = await Userdetails.findOne({ username: user.username });
         Server.find({}, (err, server) => {
-          if (err) {
-            res.send(err);
-          } else {
-            res.render("./app/app", {
-              config: config,
-              user__: user,
-              server: server,
-            });
-          }
+          if (err) return res.send(err);
+
+          const hasServer = user_1.servers.some(server => server.equals(server._id));
+
+          res.render("./app/app", {
+            config: config,
+            user__: user_,
+            user_1: user_1,
+            hasServer,
+            server: server,
+          });
         }).limit(3);
         next();
       }
@@ -105,7 +109,9 @@ router.post(
             next();
           } else {
             const user_ = await User.findById(decodedToken.id);
-            const user__ = await Userdetails.findOne({ username: user_.username });
+            const user__ = await Userdetails.findOne({
+              username: user_.username,
+            });
 
             if (!server_name)
               return res.json({
@@ -258,17 +264,20 @@ router.post(
               },
             });
 
-          const user___ = await Userdetails.find({
-            servers: server__._id,
-          });
-          const server___ = await Server.find({
-            users: user__._id,
-          });
+          //Check if the user has joined the server.
+          const users = user__.servers;
 
-          if (user__.servers === server__._id && server___ === user__.id)
+          const servers = users.filter(user => user.equals(users._id));
+
+          const server_ = server__.users;
+
+          const users_ = server_.filter(servers => servers.equals(server_._id));
+
+          if (servers === users_)
             return res.json({
               errors: {
-                invite_link: "You have already joined on this server!",
+                invite_link:
+                  "You cannot join this server anymore because you're part of it!",
               },
             });
 
@@ -277,8 +286,10 @@ router.post(
             await server__.save();
             user__.servers.push(server__.id);
             await user__.save();
-            server__.members_count += 1;
-            await user__.save();
+            Server.findOneAndUpdate(
+              { _id: server__._id },
+              { $inc: { members_count: 1 } }
+            ).exec();
 
             res.json({ server: "Joined the server successfully!" });
             next();

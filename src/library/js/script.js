@@ -10,35 +10,35 @@ console.log(
 
 const init = () => {
   //addaserver modal
-  if (document.querySelector(".addaserver_modal-overlay")) {
-    var openmodal = document.querySelectorAll(".addaserver_modal-open");
+  if (document.querySelector(".joinaserver_modal-overlay")) {
+    var openmodal = document.querySelectorAll(".joinaserver_modal-open");
     for (var i = 0; i < openmodal.length; i++) {
       openmodal[i].addEventListener("click", function (event) {
         event.preventDefault();
-        addaserver_toggleModal();
+        joinaserver_toggleModal();
       });
     }
   }
 
   if (
-    document.querySelector(".addaserver_modal-overlay") &&
-    document.querySelector(".addaserver_modal-close")
+    document.querySelector(".joinaserver_modal-overlay") &&
+    document.querySelector(".joinaserver_modal-close")
   ) {
-    const overlay = document.querySelector(".addaserver_modal-overlay");
-    overlay.addEventListener("click", addaserver_toggleModal);
+    const overlay = document.querySelector(".joinaserver_modal-overlay");
+    overlay.addEventListener("click", joinaserver_toggleModal);
 
-    var closemodal = document.querySelectorAll(".addaserver_modal-close");
+    var closemodal = document.querySelectorAll(".joinaserver_modal-close");
     for (var i = 0; i < closemodal.length; i++) {
-      closemodal[i].addEventListener("click", addaserver_toggleModal);
+      closemodal[i].addEventListener("click", joinaserver_toggleModal);
     }
   }
 
-  function addaserver_toggleModal() {
+  function joinaserver_toggleModal() {
     const body = document.querySelector("body");
-    const modal = document.querySelector(".addaserver_modal");
+    const modal = document.querySelector(".joinaserver_modal");
     modal.classList.toggle("opacity-0");
     modal.classList.toggle("pointer-events-none");
-    body.classList.toggle("addaserver_modal-active");
+    body.classList.toggle("joinaserver_modal-active");
   }
 
   //createserver modal
@@ -142,7 +142,7 @@ const init = () => {
       $("#join-a-serverform").submit(async function (e) {
         e.preventDefault();
 
-        const invite_link = $("#invite-link").val();;
+        const invite_link = $("#invite-link").val();
 
         try {
           const res = await fetch("/api/join/server", {
@@ -177,7 +177,7 @@ const init = () => {
             $("#invite-link").prop("disabled", true);
             $("#join-a-server").prop("disabled", true);
             setTimeout(() => {
-              $("body").removeClass("addaserver_modal-active");
+              $("body").removeClass("joinaserver_modal-active");
               location.assign("/app");
             }, 1000);
           }
@@ -237,6 +237,12 @@ const init = () => {
           console.log(err);
         }
       });
+    }
+
+    if (document.querySelector("#gotoServers")) {
+      function gotoServers() {
+        location.assign("/servers");
+      }
     }
 
     if (document.querySelector("#signupform")) {

@@ -41,17 +41,18 @@
               <span class="dark:text-white text-neutral-700 text-2xl">
                 Your servers
               </span>
-              <span
-                class="addserver_modal-open text-center transition ease-in cursor-pointer dark:text-neutral-300 dark:hover:text-neutral-400"
-                ><i class="fa-solid fa-plus"></i
-              ></span>
             </div>
-
             <div class="grid gap-4 xl:grid-cols-3 max-w-xs-custom-2 flex-wrap">
-              <% user__.servers.forEach(server => { %>
+              <% if(!hasServer) { %>
+              <span
+                class="text-xl text-neutral-700 font-medium dark:text-neutral-300 mt-12"
+                >There's nothing to show here</span
+              >
+              <% } %> <% user__.servers.forEach(server => { %>
               <!-- cards -->
-              <a href="/servers/<%= server._id %>">
+              <a href="/servers/<%= server._id %>" id="card_<%= server._id %>">
                 <div
+                  id="card_<%= server._id %>"
                   class="transition ease-in max-w-sm rounded overflow-hidden shadow-lg mt-5 hover:shadow-2xl"
                 >
                   <div class="z-1 w-full">
@@ -78,32 +79,32 @@
                   </div>
                 </div>
               </a>
-              <% })%> <% if(server._id !== user_.servers.arrayTo) { %>
-              <span
-                class="text-xl text-neutral-700 font-medium dark:text-neutral-300 mt-12"
-                >There's nothing to show here</span
-              >
-              <% } %>
+              <% })%>
             </div>
 
-            <a href="/servers">
-              <input
-                type="button"
-                class="mt-16 dark:bg-neutral-700 p-2 capitalize dark:text-white text-neutral-300 bg-neutral-500 hover:bg-neutral-400 dark:hover:bg-neutral-600 shadow-md transition ease-in cursor-pointer rounded-sm"
-                value="View all"
-              />
-            </a>
+            <input
+              type="button"
+              onclick="gotoServers()"
+              id="gotoServers"
+              class="mt-16 dark:bg-neutral-700 p-2 capitalize dark:text-white text-neutral-300 bg-neutral-500 hover:bg-neutral-400 dark:hover:bg-neutral-600 shadow-md transition ease-in cursor-pointer rounded-sm"
+              value="View all"
+            />
+            <input
+              type="button"
+              class="addserver_modal-open mt-16 dark:bg-neutral-700 p-2 capitalize dark:text-white text-neutral-300 bg-neutral-500 hover:bg-neutral-400 dark:hover:bg-neutral-600 shadow-md transition ease-in cursor-pointer rounded-sm"
+              value="Add a server"
+            />
           </div>
         </div>
       </section>
+      <script src="https://unpkg.com/swup@3"></script>
+      <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+      <script type="module" src="/library/js/script.js"></script>
 
       <%- include("./components/profile-modal.ejs") %> <%-
       include("./components/addserver-modal.ejs") %><%-
       include("./components/createserver-modal.ejs") %> <%-
-      include("./components/addaserver-modal.ejs") %>
+      include("./components/joinaserver-modal.ejs") %>
     </main>
-    <script src="https://unpkg.com/swup@3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-    <script type="module" src="/library/js/script.js"></script>
   </body>
 </html>
