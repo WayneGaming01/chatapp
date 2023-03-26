@@ -23,6 +23,7 @@ const userdetailsSchema = mongoose.Schema({
     type: String,
   },
   servers: [{ type: mongoose.Schema.Types.ObjectId, ref: "server" }],
+  ownedServers: [{ type: mongoose.Schema.Types.ObjectId, ref: "server" }],
   created_at: {
     type: String,
   },

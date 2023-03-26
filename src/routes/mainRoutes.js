@@ -46,20 +46,24 @@ router.get("/app", requireAuth, checkUser, async (req, res, next) => {
         if (err) return res.send(err);
 
         const user = await User.findById(decodedToken.id);
-        const user_ = await Userdetails.findOne({
+        const userforDetails = await Userdetails.findOne({
           username: user.username,
-        }).populate("servers");
-        const user_1 = await Userdetails.findOne({ username: user.username });
+        }).populate("ownedServers");
+        const userforfindone = await Userdetails.findOne({
+          username: user.username,
+        });
         Server.find({}, (err, server) => {
           if (err) return res.send(err);
 
-          const hasServer = user_1.servers.some(server => server.equals(server._id));
+          const hasServerowned = userforfindone.servers.some((server) =>
+            server.equals(server._id)
+          );
 
           res.render("./app/app", {
             config: config,
-            user__: user_,
-            user_1: user_1,
-            hasServer,
+            userforDetails: userforDetails,
+            userforfindone: userforfindone,
+            hasServerowned,
             server: server,
           });
         }).limit(3);
@@ -69,8 +73,51 @@ router.get("/app", requireAuth, checkUser, async (req, res, next) => {
   }
 });
 
-router.get("/servers", requireAuth, checkUser, (req, res) => {
-  res.render("./app/servers", { config: config });
+router.get("/servers", requireAuth, checkUser, (req, res, next) => {
+  const _DO_NOT_SHARE_TOKEN = req.cookies._DO_NOT_SHARE_TOKEN;
+
+  if (_DO_NOT_SHARE_TOKEN) {
+    jwt.verify(
+      _DO_NOT_SHARE_TOKEN,
+      config.JWT.JWT_AUTH,
+      async (err, decodedToken) => {
+        if (err) return res.send(err);
+
+        const user = await User.findById(decodedToken.id);
+        const userforDetailsOwnedServers = await Userdetails.findOne({
+          username: user.username,
+        }).populate("ownedServers");
+        const userforDetails = await Userdetails.findOne({
+          username: user.username,
+        }).populate("servers");
+        const userforfindone = await Userdetails.findOne({
+          username: user.username,
+        });
+        Server.find({}, (err, server) => {
+          if (err) return res.send(err);
+
+          const hasServerowned = userforfindone.ownedServers.some((server) =>
+            server.equals(server._id)
+          );
+
+          const hasServer = userforfindone.servers.some((server) =>
+            server.equals(server._id)
+          );
+
+          res.render("./app/servers", {
+            config: config,
+            userforDetails1: userforDetailsOwnedServers,
+            userforDetails: userforDetails,
+            userforfindone: userforfindone,
+            hasServerowned,
+            hasServer,
+            server: server,
+          });
+        })
+        next();
+      }
+    );
+  }
 });
 
 router.get("/friends", requireAuth, checkUser, (req, res) => {
@@ -109,7 +156,7 @@ router.post(
             next();
           } else {
             const user_ = await User.findById(decodedToken.id);
-            const user__ = await Userdetails.findOne({
+            const userforDetails = await Userdetails.findOne({
               username: user_.username,
             });
 
@@ -160,16 +207,16 @@ router.post(
                 server_link,
               });
 
-              const server__ = await Server.findOne({
+              const serverfindOne = await Server.findOne({
                 server_name: server_name,
               });
 
-              server.users.push(user__._id);
+              server.users.push(userforDetails._id);
               await server.save();
-              user__.servers.push(server__._id);
-              await user__.save();
+              userforDetails.ownedServers.push(serverfindOne._id);
+              await userforDetails.save();
 
-              res.json({ server: server__.id });
+              res.json({ server: serverfindOne.id });
               next();
             } catch (err) {
               res.json({ errors: handleErrors(err) });
@@ -252,51 +299,62 @@ router.post(
 
           const user = await User.findById(decodedToken.id);
 
-          const user__ = await Userdetails.findOne({
+          const userforDetails = await Userdetails.findOne({
             username: user.username,
           });
-          const server__ = await Server.findOne({ server_link: invite_link });
+          const serverfindOne = await Server.findOne({
+            server_link: invite_link,
+          });
 
-          if (user__.username === server__.server_owner)
-            return res.json({
-              errors: {
-                invite_link: "You cannot join this server because you own it!",
-              },
-            });
+          Userdetails.findOne(
+            {
+              username: userforDetails.username,
+              servers: { $all: serverfindOne._id },
+            },
+            async (err, doc) => {
+              if (err) {
+                console.log(err);
+                return res.json({
+                  errors: {
+                    invite_link: "You cannot join because of an error.",
+                  },
+                });
+              } else if (doc) {
+                return res.json({
+                  errors: {
+                    invite_link:
+                      "You cannot join this server anymore because you're part of it!",
+                  },
+                });
+              } else if (
+                serverfindOne.server_owner === userforDetails.username
+              ) {
+                return res.json({
+                  errors: {
+                    invite_link:
+                      "You cannot join this server because you're the owner!",
+                  },
+                });
+              } else {
+                try {
+                  serverfindOne.users.push(userforDetails._id);
+                  await serverfindOne.save();
+                  userforDetails.servers.push(serverfindOne.id);
+                  await userforDetails.save();
+                  Server.findOneAndUpdate(
+                    { _id: serverfindOne._id },
+                    { $inc: { members_count: 1 } }
+                  ).exec();
 
-          //Check if the user has joined the server.
-          const users = user__.servers;
-
-          const servers = users.filter(user => user.equals(users._id));
-
-          const server_ = server__.users;
-
-          const users_ = server_.filter(servers => servers.equals(server_._id));
-
-          if (servers === users_)
-            return res.json({
-              errors: {
-                invite_link:
-                  "You cannot join this server anymore because you're part of it!",
-              },
-            });
-
-          try {
-            server__.users.push(user__._id);
-            await server__.save();
-            user__.servers.push(server__.id);
-            await user__.save();
-            Server.findOneAndUpdate(
-              { _id: server__._id },
-              { $inc: { members_count: 1 } }
-            ).exec();
-
-            res.json({ server: "Joined the server successfully!" });
-            next();
-          } catch (err) {
-            res.json({ errors: { invite_link: err } });
-            next();
-          }
+                  res.json({ server: "Joined the server successfully!" });
+                  next();
+                } catch (err) {
+                  res.json({ errors: { invite_link: err } });
+                  next();
+                }
+              }
+            }
+          );
         }
       );
     }

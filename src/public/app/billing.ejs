@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <link rel="stylesheet" href="/library/css/main.css" />
     <link rel="stylesheet" href="/library/css/custom.css" />
     <title><%= config.CLIENT_NAME %></title>
@@ -26,11 +26,15 @@
   </style>
   <body class="dark:bg-main duration-75 transition ease-in">
     <main class="transition-fade" id="swup">
-      <%- include("./components/header.ejs") %>
-      <%- include("./components/profile-modal.ejs") %>
+      <%- include("./components/header.ejs") %> <%-
+      include("./components/profile-modal.ejs") %>
     </main>
     <script src="https://unpkg.com/swup@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
     <script type="module" src="/library/js/script.js"></script>
+    <%- include("./components/profile-modal.ejs") %> <%-
+    include("./components/addserver-modal.ejs") %><%-
+    include("./components/createserver-modal.ejs") %> <%-
+    include("./components/joinaserver-modal.ejs") %>
   </body>
 </html>
