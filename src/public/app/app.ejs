@@ -18,6 +18,9 @@
       src="https://kit.fontawesome.com/73d4b4352e.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/swup@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+    <script type="module" src="/library/js/script.js"></script>
   </head>
   <style>
     * {
@@ -37,57 +40,103 @@
           <div
             class="rounded-md flex flex-col shadow-md p-7 bg-neutral-200 dark:bg-neutral-800 mb-5 overflow-hidden"
           >
-            <div class="flex justify-between">
+            <div class="flex justify-between gap-10">
               <span class="dark:text-white text-neutral-700 text-2xl">
                 Your servers
               </span>
+              <a href="/servers">
+                <span
+                  class="transition ease-in dark:text-neutral-300 p-2 rounded-sm dark:bg-neutral-600 dark:hover:bg-neutral-700 shadow-md dark:hover:text-neutral-300 hover:bg-neutral-500 bg-neutral-400 hover:text-neutral-300 text-neutral-200"
+                >
+                  View all
+                </span>
+              </a>
             </div>
-            <div class="grid gap-4 xl:grid-cols-3 max-w-xs-custom-2 flex-wrap">
+            <div class="grid gap-4 xl:grid-cols-3 max-w-xs-custom flex-wrap">
               <% if(!hasServerowned) { %>
               <span
-                class="text-xl text-neutral-700 font-medium dark:text-neutral-300 mt-12"
+                class="mb-12 text-xl text-neutral-700 font-medium dark:text-neutral-300 mt-12"
                 >There's nothing to show here</span
               >
               <% } %> <% userforDetails.ownedServers.forEach(server => { %>
               <!-- cards -->
-              <a href="/servers/<%= server._id %>" id="card_<%= server._id %>">
+              <div
+                id="card_<%= server._id %>"
+                class="transition ease-in max-w-sm rounded overflow-hidden shadow-lg mt-5 hover:shadow-2xl"
+              >
+                <div class="w-full">
+                  <img
+                    src="/api/servers/<%= userforDetails._id %>/avatar/<%= server.avatar %>"
+                    alt="Avatar"
+                    class="h-24 sm:h-32 w-full object-cover hover:filter blur transition duration-500 ease-in-out filter-none"
+                  />
+                </div>
                 <div
-                  id="card_<%= server._id %>"
-                  class="transition ease-in max-w-sm rounded overflow-hidden shadow-lg mt-5 hover:shadow-2xl"
+                  class="transition ease-in px-6 py-4 bg-neutral-400 hover:bg-neutral-500 dark:bg-neutral-600 dark:hover:bg-neutral-700"
                 >
-                  <div class="w-full">
-                    <img
-                      src="/api/v1/servers/<%= server._id %>/avatar/<%= server.avatar %>"
-                      alt="Avatar"
-                      class="h-24 sm:h-32 w-full object-cover hover:filter blur transition duration-500 ease-in-out filter-none"
-                    />
-                  </div>
-                  <div
-                    class="transition ease-in px-6 py-4 bg-neutral-400 hover:bg-neutral-500 dark:bg-neutral-600 dark:hover:bg-neutral-700"
-                  >
-                    <div class="dark:text-white font-bold text-xl mb-2">
+                  <div class="dark:text-white font-bold text-xl mb-2">
+                    <a href="/servers/<%= server._id %>">
                       <span
                         class="dark:text-white text-neutral-300 transition ease-in break-all"
                         ><%= server.server_name %></span
                       >
-                    </div>
-                    <p
-                      class="dark:text-neutral-200 text-neutral-300 text-base break-all"
-                    >
-                      <%= server.server_bio %>
-                    </p>
+                    </a>
                   </div>
+                  <p
+                    class="dark:text-neutral-200 text-neutral-300 text-base break-all"
+                  >
+                    <%= server.server_bio %>
+                  </p>
+                  <span
+                    class="mt-2 dark:text-neutral-200 text-neutral-300 text-sm break-all"
+                    >By: <% if(server.server_owner === userforDetails.username)
+                    { %>You<% } else { %><a
+                      href="/u/<%= server.server_owner %>"
+                      class="dark:text-neutral-200 text-neutral-300 text-sm break-all hover:underline"
+                    ></a>
+                    <% } %>
+                  </span>
+                  <script type="module">
+                    import Toast from "/library/js/Toast.js";
+                    $("#server_link_copy_<%= server._id %>").on(
+                      "click",
+                      async function () {
+                        try {
+                          await navigator.clipboard.writeText(
+                            $("#server_link_<%= server._id %>").html()
+                          );
+                          new Toast({
+                            text: "Invite link copied!",
+                            position: "bottom-center",
+                            canClose: false,
+                            showProgress: false,
+                          });
+                        } catch (err) {
+                          new Toast({
+                            text: "Failed to copy " + err,
+                            position: "bottom-center",
+                            canClose: false,
+                            showProgress: false,
+                          });
+                        }
+                      }
+                    );
+                  </script>
+                  <span
+                    id="server_link_copy_<%= server._id %>"
+                    class="flex rounded-sm cursor-pointer break-all overflow-hidden justify-center dark:bg-neutral-800 shadow-md p-2 mt-2 dark:text-neutral-200 text-neutral-300 text-sm"
+                  >
+                    <p class="select-none" id="server_link_<%= server._id %>">
+                      <%= server.server_link %>
+                    </p>
+                  </span>
                 </div>
-              </a>
+              </div>
               <% })%>
             </div>
           </div>
         </div>
       </section>
-      <script src="https://unpkg.com/swup@3"></script>
-      <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-      <script type="module" src="/library/js/script.js"></script>
-
       <%- include("./components/profile-modal.ejs") %> <%-
       include("./components/addserver-modal.ejs") %><%-
       include("./components/createserver-modal.ejs") %> <%-

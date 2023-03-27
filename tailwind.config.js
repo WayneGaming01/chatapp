@@ -8,6 +8,7 @@ module.exports = {
     "./src/public/*/*/*/*.{ejs,html,js}",
     "./src/public/*/*/*/*/*.{ejs,html,js}",
     "./src/public/*/*/*/*/*/*.{ejs,html,js}",
+    "./node_modules/flowbite/**/*.js"
   ],
   darkMode: "class",
   theme: {

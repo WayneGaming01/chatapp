@@ -9,6 +9,104 @@ console.log(
 );
 
 const init = () => {
+  function getFileExtension(filename) {
+    // get file extension
+    const extension = filename.substring(
+      filename.lastIndexOf(".") + 1,
+      filename.length
+    );
+    return extension;
+  }
+
+  if (document.querySelector("#server-avatar")) {
+    const server_avatar = document.getElementById("server-avatar");
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+    const allowedExtension_jpg = "jpg";
+    const allowedExtension_jpeg = "jpeg";
+    const allowedExtension_png = "png";
+    const allowedExtension_gif = "gif";
+
+    server_avatar.addEventListener("change", function () {
+      let hasInvalidFiles = false;
+      for (var i = 0; i < this.files.length; i++) {
+        const file = this.files[i];
+
+        if (!allowedExtensions.find(extension => extension === getFileExtension(server_avatar.value))) {
+          hasInvalidFiles = true;
+          server_avatar.value = "";
+
+          new Toast({
+            text: "The file you have uploaded is not allowed!",
+            position: "bottom-center",
+            canClose: false,
+            showProgress: false,
+          });
+        }
+      }
+    });
+  }
+  if (document.querySelector(".signup_modal-overlay")) {
+    var openmodal = document.querySelectorAll(".signup_modal-open");
+    for (var i = 0; i < openmodal.length; i++) {
+      openmodal[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        signup_toggleModal();
+      });
+    }
+  }
+
+  if (
+    document.querySelector(".signup_modal-overlay") &&
+    document.querySelector(".signup_modal-close")
+  ) {
+    const overlay = document.querySelector(".signup_modal-overlay");
+    overlay.addEventListener("click", signup_toggleModal);
+
+    var closemodal = document.querySelectorAll(".signup_modal-close");
+    for (var i = 0; i < closemodal.length; i++) {
+      closemodal[i].addEventListener("click", signup_toggleModal);
+    }
+  }
+
+  function signup_toggleModal() {
+    const body = document.querySelector("body");
+    const modal = document.querySelector(".signup_modal");
+    modal.classList.toggle("opacity-0");
+    modal.classList.toggle("pointer-events-none");
+    body.classList.toggle("signup_modal-active");
+  }
+
+  if (document.querySelector(".login_modal-overlay")) {
+    var openmodal = document.querySelectorAll(".login_modal-open");
+    for (var i = 0; i < openmodal.length; i++) {
+      openmodal[i].addEventListener("click", function (event) {
+        event.preventDefault();
+        login_toggleModal();
+      });
+    }
+  }
+
+  if (
+    document.querySelector(".login_modal-overlay") &&
+    document.querySelector(".login_modal-close")
+  ) {
+    const overlay = document.querySelector(".login_modal-overlay");
+    overlay.addEventListener("click", login_toggleModal);
+
+    var closemodal = document.querySelectorAll(".login_modal-close");
+    for (var i = 0; i < closemodal.length; i++) {
+      closemodal[i].addEventListener("click", login_toggleModal);
+    }
+  }
+
+  function login_toggleModal() {
+    const body = document.querySelector("body");
+    const modal = document.querySelector(".login_modal");
+    modal.classList.toggle("opacity-0");
+    modal.classList.toggle("pointer-events-none");
+    body.classList.toggle("login_modal-active");
+  }
+
   //addaserver modal
   if (document.querySelector(".joinaserver_modal-overlay")) {
     var openmodal = document.querySelectorAll(".joinaserver_modal-open");
@@ -159,7 +257,7 @@ const init = () => {
             if (data.errors.invite_link) {
               new Toast({
                 text: data.errors.invite_link,
-                position: "bottom-right",
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
                 backgroundColor: "default",
@@ -169,7 +267,7 @@ const init = () => {
           if (data.server) {
             new Toast({
               text: "Joining the server...",
-              position: "bottom-right",
+              position: "bottom-center",
               canClose: false,
               showProgress: false,
             });
@@ -191,6 +289,7 @@ const init = () => {
       $("#create-serverform").submit(async function (e) {
         e.preventDefault();
 
+        const server_avatar = $("#server-avatar").val();
         const server_name = $("#server-name").val();
         const server_bio = $("#server-bio").val();
 
@@ -198,6 +297,7 @@ const init = () => {
           const res = await fetch("/api/add/server", {
             method: "POST",
             body: JSON.stringify({
+              server_avatar: server_avatar,
               server_name: server_name,
               server_bio: server_bio,
             }),
@@ -210,7 +310,17 @@ const init = () => {
             if (data.errors.server_name) {
               new Toast({
                 text: data.errors.server_name,
-                position: "bottom-right",
+                position: "bottom-center",
+                canClose: false,
+                showProgress: false,
+                backgroundColor: "default",
+              });
+            }
+
+            if (data.errors.server_avatar) {
+              new Toast({
+                text: data.errors.server_avatar,
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
                 backgroundColor: "default",
@@ -220,7 +330,7 @@ const init = () => {
           if (data.server) {
             new Toast({
               text: "Creating the server...",
-              position: "bottom-right",
+              position: "bottom-center",
               canClose: false,
               showProgress: false,
             });
@@ -229,9 +339,10 @@ const init = () => {
             $("#server-name").prop("disabled", true);
             $("#server-bio").prop("disabled", true);
             $("#create-server").prop("disabled", true);
+            $("body").removeClass("createserver_modal-active");
             setTimeout(() => {
               location.assign("/app");
-            }, 5000);
+            }, 1000);
           }
         } catch (err) {
           console.log(err);
@@ -249,10 +360,10 @@ const init = () => {
       $("#signupform").submit(async function (e) {
         e.preventDefault();
 
-        const username = $("#username").val();
-        const email = $("#email").val();
-        const password = $("#password").val();
-        const cpassword = $("#cpassword").val();
+        const username = $("#signup-username").val();
+        const email = $("#signup-email").val();
+        const password = $("#signup-password").val();
+        const cpassword = $("#signup-cpassword").val();
 
         try {
           const res = await fetch("/api/auth/signup", {
@@ -272,7 +383,7 @@ const init = () => {
             if (data.errors.username) {
               new Toast({
                 text: data.errors.username,
-                position: "bottom-right",
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
                 backgroundColor: "default",
@@ -282,7 +393,7 @@ const init = () => {
             if (data.errors.email) {
               new Toast({
                 text: data.errors.email,
-                position: "bottom-right",
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
               });
@@ -291,7 +402,7 @@ const init = () => {
             if (data.errors.password) {
               new Toast({
                 text: data.errors.password,
-                position: "bottom-right",
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
               });
@@ -300,23 +411,23 @@ const init = () => {
           if (data.user) {
             new Toast({
               text: "Signing up...",
-              position: "bottom-right",
+              position: "bottom-center",
               canClose: false,
               showProgress: false,
             });
-            $("#username").val("");
-            $("#email").val("");
-            $("#password").val("");
-            $("#cpassword").val("");
-            $("#username").prop("disabled", true);
-            $("#email").prop("disabled", true);
-            $("#password").prop("disabled", true);
-            $("#cpassword").prop("disabled", true);
+            $("#signup-username").val("");
+            $("#signup-email").val("");
+            $("#signup-password").val("");
+            $("#signup-cpassword").val("");
+            $("#signup-username").prop("disabled", true);
+            $("#signup-email").prop("disabled", true);
+            $("#signup-password").prop("disabled", true);
+            $("#signup-cpassword").prop("disabled", true);
             $("#signup").prop("disabled", true);
             setTimeout(() => {
               new Toast({
                 text: "Done! Check your email.",
-                position: "bottom-right",
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
               });
@@ -337,8 +448,8 @@ const init = () => {
       $("#loginform").submit(async function (e) {
         e.preventDefault();
 
-        const email = $("#email").val();
-        const password = $("#password").val();
+        const email = $("#login-email").val();
+        const password = $("#login-password").val();
 
         try {
           const res = await fetch("/api/auth/login", {
@@ -356,7 +467,7 @@ const init = () => {
             if (data.errors.email) {
               new Toast({
                 text: data.errors.email,
-                position: "bottom-right",
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
                 setFontSize: "12px",
@@ -366,7 +477,7 @@ const init = () => {
             if (data.errors.password) {
               new Toast({
                 text: data.errors.password,
-                position: "bottom-right",
+                position: "bottom-center",
                 canClose: false,
                 showProgress: false,
                 setFontSize: "12px",
@@ -376,14 +487,14 @@ const init = () => {
           if (data.user) {
             new Toast({
               text: "Logging in...",
-              position: "bottom-right",
+              position: "bottom-center",
               canClose: false,
               showProgress: false,
             });
-            $("#email").val("");
-            $("#password").val("");
-            $("#email").prop("disabled", true);
-            $("#password").prop("disabled", true);
+            $("#login-email").val("");
+            $("#login-password").val("");
+            $("#login-email").prop("disabled", true);
+            $("#login-password").prop("disabled", true);
             $("#login").prop("disabled", true);
             setTimeout(() => {
               location.assign("/app");

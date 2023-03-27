@@ -11,41 +11,81 @@
     <div class="signup_modal-content py-4 text-left px-6">
       <div class="flex justify-between items-center pb-3">
         <p class="text-2xl font-bold dark:text-white text-neutral-800">
-          Join a server
+          Signup
         </p>
         <div class="signup_modal-close cursor-pointer z-50">
-          <svg
-            class="fill-current dark:text-white text-neutral-800"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-          >
-            <path
-              d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
-            ></path>
-          </svg>
+          <i class="fa-solid fa-xmark dark:text-white text-neutral-800"></i>
         </div>
       </div>
-      <form action="" method="POST" id="join-a-serverform">
+      <form action="" method="POST" id="signupform">
         <label
-          for="invite-link"
+          for="signup-username"
           class="font-bold dark:text-neutral-300 text-neutral-700"
-          >Invite link</label
+          >Username</label
         >
         <input
-          id="invite-link"
+          id="signup-username"
           type="text"
-          placeholder="<%= config.CLIENT_URL %>/inv/nBjsCoq"
+          placeholder="Username"
+          class="mb-2 placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg"
+        />
+        <label
+          for="signup-email"
+          class="font-bold dark:text-neutral-300 text-neutral-700"
+          >Email</label
+        >
+        <input
+          id="signup-email"
+          type="text"
+          placeholder="Email"
+          class="mb-2 placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg"
+        />
+        <label
+          for="signup-password"
+          class="font-bold dark:text-neutral-300 text-neutral-700"
+          >Password</label
+        >
+        <input
+          id="signup-password"
+          type="password"
+          placeholder="Password"
+          class="mb-2 placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg"
+        />
+        <label
+          for="signup-cpassword"
+          class="font-bold dark:text-neutral-300 text-neutral-700"
+          >Confirm password</label
+        >
+        <input
+          id="signup-cpassword"
+          type="password"
+          placeholder="Confirm password"
           class="placeholder:text-neutral-700 dark:placeholder:text-neutral-500 outline-none transition ease-in bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 p-4 w-full rounded-sm shadow-md focus:shadow-lg"
         />
+        <span class="text-neutral-500 dark:text-neutral-300 text-sm"
+          >By signing up, your accepting our
+          <a href="/terms" class="hover:underline text-blue-400"
+            >Terms of condition</a
+          >
+          and
+          <a href="/privacy" class="hover:underline text-blue-400"
+            >Privacy policy</a
+          ></span
+        >
         <button
           type="submit"
-          id="join-a-server"
+          id="signup"
           class="mt-4 transition ease-in bg-neutral-300 hover:bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-neutral-300 p-4 w-full text-center rounded-sm shadow-md hover:shadow-lg"
         >
-          Join
+          Signup
         </button>
+        <span class="text-neutral-500 dark:text-neutral-300 text-sm"
+          >Have an account?
+          <span
+            class="login_modal-open cursor-pointer signup_modal-close hover:underline text-blue-400"
+            >Login</span
+          ></span
+        >
       </form>
     </div>
   </div>

@@ -8,6 +8,7 @@ const Invite = require("../models/Invite");
 const User = require("../models/User");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
 
 const handleErrors = (err) => {
   console.log(err.message, err.code);
@@ -55,7 +56,7 @@ router.get("/app", requireAuth, checkUser, async (req, res, next) => {
         Server.find({}, (err, server) => {
           if (err) return res.send(err);
 
-          const hasServerowned = userforfindone.servers.some((server) =>
+          const hasServerowned = userforfindone.ownedServers.some((server) =>
             server.equals(server._id)
           );
 
@@ -113,11 +114,15 @@ router.get("/servers", requireAuth, checkUser, (req, res, next) => {
             hasServer,
             server: server,
           });
-        })
+        });
         next();
       }
     );
   }
+});
+
+router.get("/discover", requireAuth, checkUser, (req, res) => {
+  res.render("./app/discover", { config: config });
 });
 
 router.get("/friends", requireAuth, checkUser, (req, res) => {
@@ -143,7 +148,7 @@ router.post(
   checkUser,
   requireAuth,
   async (req, res, next) => {
-    const { server_name, server_bio } = req.body;
+    const { server_avatar, server_name, server_bio } = req.body;
     const _DO_NOT_SHARE_TOKEN = req.cookies._DO_NOT_SHARE_TOKEN;
 
     if (_DO_NOT_SHARE_TOKEN) {
@@ -155,9 +160,9 @@ router.post(
             console.log(err.message);
             next();
           } else {
-            const user_ = await User.findById(decodedToken.id);
+            const userfindById = await User.findById(decodedToken.id);
             const userforDetails = await Userdetails.findOne({
-              username: user_.username,
+              username: userfindById.username,
             });
 
             if (!server_name)
@@ -182,20 +187,36 @@ router.post(
               return result;
             }
 
+            if (!server_avatar) {
+              return res.json({
+                errors: {
+                  server_avatar: "No file for server avatar was uploaded!",
+                },
+              });
+            }
+
+            if (server_avatar.size / (1024 * 1024) > 2)
+              return res.json({
+                errors: {
+                  server_avatar: "The size is too big! 2mb is maximum.",
+                },
+              });
+
             try {
-              const server_owner = user_.username;
-              const server_avatar = "";
+              const server_avatar_generatedChar = generateChar(24);
+              const server_owner = userfindById.username;
+              const server_avatar1 = `/api/servers/${server_avatar_generatedChar}/avatar/${server_avatar}`;
               const members_count = 1; //By default because the owner...
-              const user_avatar = `${config.CLIENT_URL}/api/v1/users/${user_.username}/profile${user_.avatar}`;
+              const user_avatar = `/api/users/${userfindById.username}/profile${userfindById.avatar}`;
               const generatedChar = generateChar(7);
-              const server_link = `${config.CLIENT_URL}/inv/${generatedChar}`;
-              const user = user_._id;
-              const user_invite = user_.username;
+              const server_link = `/inv/${generatedChar}`;
+              const user = userfindById._id;
+              const user_invite = userfindById.username;
               const server = await Server.create({
                 server_name,
                 server_bio,
                 members_count,
-                server_avatar,
+                server_avatar1,
                 server_link,
                 server_owner,
                 user,
@@ -203,9 +224,31 @@ router.post(
               await Invite.create({
                 user_invite,
                 user_avatar,
-                server_avatar,
+                server_avatar1,
                 server_link,
               });
+              const server_folder = `./src/api/servers/${server_avatar_generatedChar}`;
+              await fs.mkdirSync(server_folder);
+              await fs.mkdirSync(`${server_folder}/avatar/`);
+
+              const storageEngine = multer.diskStorage({
+                destination: function (req, file, cb) {
+                  cb(
+                    null,
+                    `/src/api/servers/${server_avatar_generatedChar}/avatar/`
+                  );
+                },
+                filename: (req, file, cb) => {
+                  cb(null, `${Date.now()}--${file.originalname}`);
+                },
+              });
+
+              const upload = multer({
+                storage: storageEngine,
+                limits: { fileSize: server_avatar.size / (1024 * 1024) > 2 },
+              });
+
+              upload.single("server_avatar");
 
               const serverfindOne = await Server.findOne({
                 server_name: server_name,
@@ -216,6 +259,7 @@ router.post(
               userforDetails.ownedServers.push(serverfindOne._id);
               await userforDetails.save();
 
+              console.log(req.file);
               res.json({ server: serverfindOne.id });
               next();
             } catch (err) {
@@ -258,12 +302,12 @@ router.get("/api/users/:user", async (req, res) => {
 router.get("/u/:username", checkUser, async (req, res) => {
   const username = req.params.username;
 
-  const user_ = await Userdetails.findOne({ username: username });
+  const userfindOne = await Userdetails.findOne({ username: username });
 
-  if (user_) {
-    res.render("[u]", { user_: user_, config: config });
+  if (userfindOne) {
+    res.render("[u]", { userfindOne: userfindOne, config: config });
   } else {
-    res.render("[u]", { user_: "", config: config });
+    res.render("[u]", { userfindOne: "", config: config });
   }
 });
 
@@ -313,7 +357,6 @@ router.post(
             },
             async (err, doc) => {
               if (err) {
-                console.log(err);
                 return res.json({
                   errors: {
                     invite_link: "You cannot join because of an error.",
@@ -360,36 +403,80 @@ router.post(
     }
   }
 );
-router.get("/inv/:invite", checkUser, async (req, res) => {
+router.get("/inv/:invite", requireAuth, checkUser, async (req, res) => {
   const invite = req.params.invite;
   const _DO_NOT_SHARE_TOKEN = req.cookies._DO_NOT_SHARE_TOKEN;
 
-  if (!_DO_NOT_SHARE_TOKEN) {
-    res.redirect("/login");
-  }
+  const str = "aBcdEfs";
+
+  if (!invite || invite.length < str.length || invite.length > str.length)
+    return res.render("[inv]", {
+      config: config,
+      error: "The invite link is either expired or invalid!",
+      success: "",
+    });
 
   try {
     jwt.verify(
       _DO_NOT_SHARE_TOKEN,
       config.JWT.JWT_AUTH,
       async (err, decodedToken) => {
-        if (err) return res.status(500).json(err);
+        if (err) return res.json(err);
 
-        const server = await Server.findOne({ server_link: invite });
-        const user = await Userdetails.findOne({
-          username: decodedToken.username,
+        const userfindById = User.findById(decodedToken.id);
+        const userforDetails = Userdetails.findOne({
+          username: userfindById.username,
         });
+        const server = Server.findOne({ server_link: invite });
 
-        server.users.push(user._id);
-        await server.save();
+        await Userdetails.findOne(
+          { username: userforDetails.username, servers: { $all: server._id } },
+          async (err, doc) => {
+            if (err) {
+              res.render("[inv]", {
+                config: config,
+                error: "You cannot join because of an error.",
+                success: "",
+              });
+            } else if (doc) {
+              res.render("[inv]", {
+                config: config,
+                error:
+                  "You cannot join this server anymore because you're part of it!",
+                success: "",
+              });
+            } else if (userforDetails.username === server.server_owner) {
+              res.render("[inv]", {
+                config: config,
+                error: "You cannot join this server because you're the owner!",
+                success: "",
+              });
+            } else {
+              try {
+                serverfindOne.users.push(userforDetails._id);
+                await serverfindOne.save();
+                userforDetails.servers.push(serverfindOne.id);
+                await userforDetails.save();
+                Server.findOneAndUpdate(
+                  { _id: serverfindOne._id },
+                  { $inc: { members_count: 1 } }
+                ).exec();
+                Userdetails.findOneAndUpdate(
+                  { _id: userforDetails._id },
+                  { $inc: { servers_count: 1 } }
+                ).exec();
 
-        user.servers.push(server._id);
-        await user.save();
-
-        const server_ = await Userdetails.findById(user._id).populate(
-          "servers"
+                res.render("[inv]", {
+                  config: config,
+                  errors: "",
+                  success: "Successfully joined the server!",
+                });
+              } catch (err) {
+                res.json({ errors: { invite: err } });
+              }
+            }
+          }
         );
-        res.redirect("/app", { config: config, server: server_ });
       }
     );
   } catch (error) {

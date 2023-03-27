@@ -18,6 +18,9 @@
       src="https://kit.fontawesome.com/73d4b4352e.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://unpkg.com/swup@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+    <script type="module" src="/library/js/script.js"></script>
   </head>
   <style>
     * {
@@ -27,14 +30,10 @@
   <body class="dark:bg-main duration-75 transition ease-in">
     <main class="transition-fade" id="swup">
       <%- include("./components/header.ejs") %> <%-
-      include("./components/profile-modal.ejs") %>
+      include("./components/profile-modal.ejs") %><%-
+      include("./components/addserver-modal.ejs") %><%-
+      include("./components/createserver-modal.ejs") %> <%-
+      include("./components/joinaserver-modal.ejs") %>
     </main>
-    <script src="https://unpkg.com/swup@3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-    <script type="module" src="/library/js/script.js"></script>
-    <%- include("./components/profile-modal.ejs") %> <%-
-    include("./components/addserver-modal.ejs") %><%-
-    include("./components/createserver-modal.ejs") %> <%-
-    include("./components/joinaserver-modal.ejs") %>
   </body>
 </html>

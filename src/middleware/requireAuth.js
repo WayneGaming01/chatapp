@@ -7,18 +7,22 @@ const requireAuth = (req, res, next) => {
   const _DO_NOT_SHARE_TOKEN = req.cookies._DO_NOT_SHARE_TOKEN;
 
   if (_DO_NOT_SHARE_TOKEN) {
-    jwt.verify(_DO_NOT_SHARE_TOKEN, config.JWT.JWT_AUTH, async (err, decodedToken) => {
-      if (err) {
-        console.log(err.message);
-        res.redirect("/login");
-        next();
-      } else {
-        let user = await Userdetails.findById(decodedToken.id);
-        next();
+    jwt.verify(
+      _DO_NOT_SHARE_TOKEN,
+      config.JWT.JWT_AUTH,
+      async (err, decodedToken) => {
+        if (err) {
+          console.log(err.message);
+          res.redirect("/");
+          next();
+        } else {
+          const user = await User.findById(decodedToken.id);
+          next();
+        }
       }
-    });
+    );
   } else {
-    res.redirect("/login");
+    res.redirect("/");
   }
 };
 
@@ -26,27 +30,32 @@ const checkUser = (req, res, next) => {
   const _DO_NOT_SHARE_TOKEN = req.cookies._DO_NOT_SHARE_TOKEN;
 
   if (_DO_NOT_SHARE_TOKEN) {
-    jwt.verify(_DO_NOT_SHARE_TOKEN, config.JWT.JWT_AUTH, async (err, decodedToken) => {
-      if (err) {
-        console.log(err.message);
-        res.locals.user = "";
-        res.locals.user_ = "";
-        next();
-      } else {
-        let user = await User.findById(decodedToken.id);
-        let user_ = await Userdetails.findOne({ username: user.username });
-        res.locals.user = user;
-        res.locals.user_ = user_;
-        next();
+    jwt.verify(
+      _DO_NOT_SHARE_TOKEN,
+      config.JWT.JWT_AUTH,
+      async (err, decodedToken) => {
+        if (err) {
+          console.log(err.message);
+          res.locals.user = "";
+          res.locals.userforDetailsfindOne = "";
+          next();
+        } else {
+          const user = await User.findById(decodedToken.id);
+          let userforDetailsfindOne = await Userdetails.findOne({
+            username: user.username,
+          });
+          res.locals.user = user;
+          res.locals.userforDetailsfindOne = userforDetailsfindOne;
+          next();
+        }
       }
-    });
+    );
   } else {
     res.locals.user = "";
-    res.locals.user_ = "";
+    res.locals.userforDetailsfindOne = "";
     next();
   }
 };
-
 
 module.exports = {
   requireAuth,

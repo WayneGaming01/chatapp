@@ -19,6 +19,9 @@ const userdetailsSchema = mongoose.Schema({
   friends_count: {
     type: Number,
   },
+  servers_count: {
+    type: Number,
+  },
   email_verified: {
     type: String,
   },

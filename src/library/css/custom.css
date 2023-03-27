@@ -1,3 +1,12 @@
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 32px;
+}
+
 .profile_modal {
   transition: opacity 0.25s ease;
 }
@@ -11,6 +20,14 @@
 }
 
 .joinaserver_modal {
+  transition: opacity 0.25s ease;
+}
+
+.login_modal {
+  transition: opacity 0.25s ease;
+}
+
+.signup_modal {
   transition: opacity 0.25s ease;
 }
 

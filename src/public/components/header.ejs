@@ -35,7 +35,7 @@
       class="profile_modal-open cursor-pointer select-none transition ease-in text-neutral-700 lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 bg-neutral-300 hover:bg-neutral-400 hover:dark:bg-neutral-700 dark:bg-neutral-800"
     >
       <img
-        src="/api/v1/users/<%= user.username %>/profile<%= user_.avatar %>"
+        src="/api/users/<%= user.username %>/profile<%= userforDetailsfindOne.avatar %>"
         alt="profile"
         class="h-5 rounded-full inline-flex outline outline-1"
       />
@@ -54,15 +54,13 @@
         </button>
       </a>
       <% } else { %>
-      <a href="/login">
         <button
           type="button"
           id="mt-2-custom"
-          class="cursor-pointer select-none transition ease-in text-neutral-700 lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 bg-neutral-300 hover:bg-neutral-400 hover:dark:bg-neutral-700 dark:bg-neutral-800"
+          class="login_modal-open cursor-pointer select-none transition ease-in text-neutral-700 lg:w-auto w-full px-3 py-2 rounded dark:text-neutral-400 bg-neutral-300 hover:bg-neutral-400 hover:dark:bg-neutral-700 dark:bg-neutral-800"
         >
           Login
         </button>
-      </a>
       <% } %>
     </div>
   </div>

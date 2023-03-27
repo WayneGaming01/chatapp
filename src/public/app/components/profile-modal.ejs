@@ -15,43 +15,57 @@
         </p>
       </div>
       <!-- <span class="text-neutral-700 dark:text-neutral-300">
-        Profile url: <%= user_.profile_url %><br />
-        Joined at: <%= user_.created_at %>
+        Profile url: <%= userforDetailsfindOne.profile_url %><br />
+        Joined at: <%= userforDetailsfindOne.created_at %>
       </span> -->
 
       <div class="flex items-center gap-2">
-        <img src="/api/v1/users/<%= user.username %>/profile<%= user_.avatar %>" alt="Profile" class="border-solid border-2 border-green-500 h-24 w-24 rounded-full p-1">
-        <span class="text-xl text-neutral-700 dark:text-neutral-300"><%= user_.username %></span>
+        <img
+          src="/api/users/<%= user.username %>/profile<%= userforDetailsfindOne.avatar %>"
+          alt="Profile"
+          class="border-solid border-2 border-green-500 h-24 w-24 rounded-full p-1"
+        />
+        <span class="text-xl text-neutral-700 dark:text-neutral-300"
+          ><%= userforDetailsfindOne.username %></span
+        >
       </div>
       <div class="bg-neutral-300 dark:bg-neutral-900 p-4 rounded-md mb-5 mt-5">
         <span class="dark:text-white text-sm text-neutral-700">
-            <% if(user_.bio === "") { %>
-                There's nothing to show here.
-            <% } else { %>
-                <%= user_.bio %>
-            <% } %>
+          <% if(userforDetailsfindOne.bio === "") { %> There's nothing to show
+          here. <% } else { %> <%= userforDetailsfindOne.bio %> <% } %>
         </span>
-        <br>
-        <h1 class="mt-5 text-md capitalize font-medium dark:text-white text-neutral-700">
-            Account created
+        <br />
+        <h1
+          class="mt-5 text-md capitalize font-medium dark:text-white text-neutral-700"
+        >
+          Account created
         </h1>
         <p class="text-sm dark:text-white text-neutral-700">
-            <%= user_.created_at %>
+          <%= userforDetailsfindOne.created_at %>
         </p>
       </div>
-      <div class="flex justify-end pt-2">
-        <a href="<%= user_.profile_url %>" target="_blank">
+      <div class="flex justify-between pt-2">
+        <a href="/settings">
           <button
-            class="mr-2 transition ease-in px-4 dark:hover:text-neutral-700 dark:hover:bg-neutral-600 p-3 rounded-sm text-neutral-700 dark:text-white hover:bg-neutral-400"
+            class="mr-2 transition ease-in px-4 dark:hover:text-neutral-500 p-3 rounded-sm text-neutral-700 hover:text-neutral-500 dark:text-white"
           >
-            Visit
+            <i class="fa-solid fa-gear"></i>
           </button>
         </a>
-        <button
-          class="transition ease-in profile_modal-close px-4 dark:hover:text-neutral-700 dark:hover:bg-neutral-600 dark:bg-neutral-500 p-3 rounded-sm text-white bg-neutral-500 hover:bg-neutral-400"
-        >
-          Close
-        </button>
+        <div>
+          <a href="<%= userforDetailsfindOne.profile_url %>" target="_blank">
+            <button
+              class="mr-2 transition ease-in px-4 dark:hover:text-neutral-700 dark:hover:bg-neutral-600 p-3 rounded-sm text-neutral-700 dark:text-white hover:bg-neutral-400"
+            >
+              Visit
+            </button>
+          </a>
+          <button
+            class="transition ease-in profile_modal-close px-4 dark:hover:text-neutral-700 dark:hover:bg-neutral-600 dark:bg-neutral-500 p-3 rounded-sm text-white bg-neutral-500 hover:bg-neutral-400"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
