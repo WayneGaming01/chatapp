@@ -1,16 +1,16 @@
 {
   "PORT": 3000,
-  "MONGO_CLUSTER": "mongodb+srv://admin:tPcknggYPAWS1DLA@cluster0.du5g8rv.mongodb.net/chatapp",
+  "MONGO_CLUSTER": "",
   "CLIENT_URL": "http://localhost:3000",
-  "CLIENT_NAME": "CoreFire",
-  "CLIENT_NAME_lowercase": "corefire",
+  "CLIENT_NAME": "",
+  "CLIENT_NAME_lowercase": "",
   "JWT": {
-    "JWT_AUTH": "SADAJdsjDSAjsadjASDJksja",
-    "JWT_VERIFYTOKEN": "DSAJnjdsjDSAJdsjadjsjADJAJ"
+    "JWT_AUTH": "",
+    "JWT_VERIFYTOKEN": ""
   },
   "MAIL_CREDENTIALS": {
-    "MAIL_HOST": "smtp.gmail.com",
-    "MAIL_USER": "waynegg21@gmail.com",
-    "MAIL_PASSWORD": "dpshwygttlpxlpnk"
+    "MAIL_HOST": "",
+    "MAIL_USER": "",
+    "MAIL_PASSWORD": ""
   }
 }
